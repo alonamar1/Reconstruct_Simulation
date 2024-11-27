@@ -35,7 +35,7 @@
         {
                 return EnvironmentScore;
         }
-        const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions)
+        const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
         {
             int a=INT32_MAX;
             for (FacilityType f:facilitiesOptions)
