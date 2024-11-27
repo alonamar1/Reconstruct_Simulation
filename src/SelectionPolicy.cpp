@@ -23,19 +23,7 @@
         EconomyScore=EconomyScore;
         EnvironmentScore=EnvironmentScore;
         }
-        /*int BalancedSelection::getLifeQualityScore() const
-        {
-                return LifeQualityScore;
-        }
-        int BalancedSelection::getEconomyScore() const
-        {
-                return EconomyScore;
-        }
-        int BalancedSelection::getEnvironmentScore() const
-        {
-                return EnvironmentScore;
-        }
-        const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions)
+        const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
         {
             int a=INT32_MAX;
             int tempA, tempB, tempC, tempD;
@@ -43,8 +31,8 @@
             {   
                 int lqs, ecos, envs;
                 lqs = LifeQualityScore + facilitiesOptions[i].getLifeQualityScore();
-                ecos=EconomyScore + facilitiesOptions[i].getEconomyScore();
-                envs=EnvironmentScore + facilitiesOptions[i].getEnvironmentScore();
+                ecos= EconomyScore + facilitiesOptions[i].getEconomyScore();
+                envs= EnvironmentScore + facilitiesOptions[i].getEnvironmentScore();
                 tempA=std::abs(lqs-ecos); tempB=std::abs(ecos-envs); tempC=std::abs(envs-lqs);
                 if (tempA+tempB+tempC==0)
                         return facilitiesOptions[i];
@@ -52,9 +40,7 @@
                 {
                         a=tempA+tempB+tempC;
                         tempD=i;
-                }
-                
-                
+                }           
             }
             return facilitiesOptions[tempD];
 
