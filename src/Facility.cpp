@@ -71,7 +71,6 @@ const string Facility::toString() const {
              + "\nTime Left: " + std::to_string(timeLeft);
 
 }
-//FacilityType& FacilityType::operator=(const FacilityType& other) = default;
 
 /*FacilityType& FacilityType::operator=(const FacilityType& other):
         name(other.name),
