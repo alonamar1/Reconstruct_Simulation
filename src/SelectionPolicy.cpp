@@ -23,7 +23,7 @@
         EconomyScore=EconomyScore;
         EnvironmentScore=EnvironmentScore;
         }
-        int BalancedSelection::getLifeQualityScore() const
+        /*int BalancedSelection::getLifeQualityScore() const
         {
                 return LifeQualityScore;
         }
@@ -35,17 +35,39 @@
         {
                 return EnvironmentScore;
         }
-        const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions)
-        {
+        */
+        const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
+        {    
+            FacilityType toReturn = facilitiesOptions[0];
             int a=INT32_MAX;
-            for (FacilityType f:facilitiesOptions)
+            int tempA, tempB, tempC, tempD;
+            for (int i=0; i<facilitiesOptions.size(); i++)
             {   
-                int lqs=0;
-                int ecos=0, envs=0;
-                lqs = f.getLifeQualityScore();
+                int lqs, ecos, envs;
+                lqs = LifeQualityScore + facilitiesOptions[i].getLifeQualityScore();
+                ecos=EconomyScore + facilitiesOptions[i].getEconomyScore();
+                envs=EnvironmentScore + facilitiesOptions[i].getEnvironmentScore();
+                tempA=std::abs(lqs-ecos); tempB=std::abs(ecos-envs); tempC=std::abs(envs-lqs);
+                if (tempA+tempB+tempC==0)
+                        return facilitiesOptions[i];
+                if (tempA+tempB+tempC<a)
+                {
+                        a=tempA+tempB+tempC;
+                        tempD=i;
+                }
+                
+                
             }
-        
+            return facilitiesOptions[tempD];
+
         }
-        //const string toString() const override;
-        //BalancedSelection *clone() const override;
-        //~BalancedSelection() override = default;
+        const string BalancedSelection::toString() const 
+        {
+                return "life quality score is: " +std::to_string(LifeQualityScore) + "/n" +
+                "ecomony score is: " +std::to_string(EconomyScore) + "/n" +
+                "environment score is: " +std::to_string(EnvironmentScore);
+        }
+        BalancedSelection* BalancedSelection::clone() const {
+        return new BalancedSelection(LifeQualityScore, EconomyScore, EnvironmentScore);  
+        }
+        BalancedSelection::~BalancedSelection() = default;
