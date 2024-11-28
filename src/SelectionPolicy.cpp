@@ -4,8 +4,9 @@
         NaiveSelection::NaiveSelection(): lastSelectedIndex(0){}
         NaiveSelection::NaiveSelection(int i): lastSelectedIndex(i){}
         const FacilityType& NaiveSelection::selectFacility(const vector<FacilityType>& facilitiesOptions) 
-        {
-                return facilitiesOptions[lastSelectedIndex+1];
+        {       
+                lastSelectedIndex++;
+                return facilitiesOptions[lastSelectedIndex];
         }
         const string NaiveSelection::toString() const 
         {
@@ -69,3 +70,35 @@
                 pol.EconomyScore += economy;
                 pol.EnvironmentScore += environment;
         }
+
+        
+        EconomySelection::EconomySelection():lastSelectedIndex(0){}
+        EconomySelection::EconomySelection(int i):lastSelectedIndex(i){}
+        const FacilityType& EconomySelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
+        {
+                int maxEco = INT32_MIN, currFacility = -1;
+                for (int i = 0; i < facilitiesOptions.size(); i++)
+                {
+                        if (facilitiesOptions[i].getEconomyScore() > maxEco)
+                                {
+                                       currFacility = i;
+                                        maxEco = facilitiesOptions[i].getEconomyScore();
+                                }
+
+                }
+                if ( currFacility != -1)
+                {
+                        lastSelectedIndex++;
+                        return facilitiesOptions[lastSelectedIndex];
+                }
+                return facilitiesOptions[maxEco]; //should we change the index in the field??
+        }
+        EconomySelection* EconomySelection::clone() const
+        {
+                return new EconomySelection(lastSelectedIndex);  
+        }
+        
+        const string toString() const override; //to complete
+        
+
+
