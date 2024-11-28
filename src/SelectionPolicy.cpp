@@ -1,11 +1,12 @@
 #pragma once
 #include "SelectionPolicy.h"
 
-        NaiveSelection::NaiveSelection(): lastSelectedIndex(0){}
+//--------------NaiveSelection---------------------//
+        NaiveSelection::NaiveSelection(): lastSelectedIndex(-1){} // when we add 1 in "selectSelection" func it wil start in index 0 
         NaiveSelection::NaiveSelection(int i): lastSelectedIndex(i){}
         const FacilityType& NaiveSelection::selectFacility(const vector<FacilityType>& facilitiesOptions) 
         {       
-                lastSelectedIndex++;
+                lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size(); // Cycling on vector size
                 return facilitiesOptions[lastSelectedIndex];
         }
         const string NaiveSelection::toString() const 
@@ -17,13 +18,14 @@
                 return new NaiveSelection(lastSelectedIndex);
         }
 
+//--------------BalancedSelection---------------------//
         BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int EnvironmentScore)
         :LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore)  {}
 
         const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
         {
         int minDif = INT32_MAX;
-        int difLE = 0, difEE = 0, difEL = 0, currFacility = 0;
+        int difLE = 0, difEE = 0, difEL = 0, nextFacility = 0;
 
         // Check which facility need to be built
         for (int i = 0; i < facilitiesOptions.size(); i++)
@@ -46,12 +48,12 @@
         if (difLE + difEE + difLE < minDif)
         {
                 minDif = difLE + difEE + difEL;
-                currFacility = i;
+                nextFacility = i;
         }           
         }
         // Update Scores
-        UpdateScores(*this ,facilitiesOptions[currFacility].getLifeQualityScore(),facilitiesOptions[currFacility].getEconomyScore(), facilitiesOptions[currFacility].getEnvironmentScore());
-        return facilitiesOptions[currFacility];
+        UpdateScores(*this ,facilitiesOptions[nextFacility].getLifeQualityScore(),facilitiesOptions[nextFacility].getEconomyScore(), facilitiesOptions[nextFacility].getEnvironmentScore());
+        return facilitiesOptions[nextFacility];
 
         }
         const string BalancedSelection::toString() const 
@@ -71,34 +73,67 @@
                 pol.EnvironmentScore += environment;
         }
 
-        
+//--------------EconomySelection---------------------//
         EconomySelection::EconomySelection():lastSelectedIndex(0){}
-        EconomySelection::EconomySelection(int i):lastSelectedIndex(i){}
+        EconomySelection::EconomySelection(int i): lastSelectedIndex(i){}
         const FacilityType& EconomySelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
         {
-                int maxEco = INT32_MIN, currFacility = -1;
-                for (int i = 0; i < facilitiesOptions.size(); i++)
+                bool found = false;
+                // Assuming there is at least one economy facility in vector
+                for (int i = lastSelectedIndex; !found; i++)
                 {
-                        if (facilitiesOptions[i].getEconomyScore() > maxEco)
-                                {
-                                       currFacility = i;
-                                        maxEco = facilitiesOptions[i].getEconomyScore();
-                                }
-
+                        if (facilitiesOptions[i].getCategory() == FacilityCategory::ECONOMY)
+                        {
+                                found = true;
+                                lastSelectedIndex = i;
+                        }
+                        // Search in cycle until find next facility
+                        if (i >= facilitiesOptions.size()) {
+                                i = 0;
+                        }
                 }
-                if ( currFacility != -1)
-                {
-                        lastSelectedIndex++;
-                        return facilitiesOptions[lastSelectedIndex];
-                }
-                return facilitiesOptions[maxEco]; //should we change the index in the field??
+                return facilitiesOptions[lastSelectedIndex];
         }
         EconomySelection* EconomySelection::clone() const
         {
                 return new EconomySelection(lastSelectedIndex);  
         }
         
-        const string toString() const override; //to complete
+        const string EconomySelection::toString() const {
+                return "Last selected Index: " + std::to_string(lastSelectedIndex);
+        }
+
+//--------------SustainabilitySelection---------------------//
+        SustainabilitySelection::SustainabilitySelection():lastSelectedIndex(0){}
+        SustainabilitySelection::SustainabilitySelection(int i): lastSelectedIndex(i){}
+
+        const FacilityType& SustainabilitySelection::selectFacility(const vector<FacilityType>& facilitiesOptions)
+        {
+                bool found = false;
+                // Assuming there is at least one environment facility in vector
+                for (int i = lastSelectedIndex; !found; i++)
+                {
+                        if (facilitiesOptions[i].getCategory() == FacilityCategory::ENVIRONMENT)
+                        {
+                                found = true;
+                                lastSelectedIndex = i;
+                        }
+                        // Search in cycle until find next facility
+                        if (i >= facilitiesOptions.size()) {
+                                i = 0;
+                        }
+                }
+                return facilitiesOptions[lastSelectedIndex];
+        }
+
+        SustainabilitySelection* SustainabilitySelection::clone() const
+        {
+                return new SustainabilitySelection(lastSelectedIndex);  
+        }
+        
+        const string SustainabilitySelection::toString() const {
+                return "Last selected Index: " + std::to_string(lastSelectedIndex);
+        }
         
 
 
