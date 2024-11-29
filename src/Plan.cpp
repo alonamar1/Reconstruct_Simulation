@@ -1,4 +1,6 @@
 #include "Plan.h"
+#include <iostream>
+
 
         Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions):
         plan_id(planId), settlement(settlement), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), status(?????), underConstruction(???), 
@@ -17,19 +19,22 @@
         {
             return environment_score;
         }
-        void setSelectionPolicy(SelectionPolicy *selectionPolicy)
+        void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy)
         {
-            selectionPolicy=selectionPolicy; //??????
+            this -> selectionPolicy; 
         }
 
-        void step();
+        void Plan::step()
+        {
+
+        }
 
         void Plan::printStatus()
         {
             if (status == PlanStatus::AVALIABLE)
                 std::cout << "AVAILABLE" << std::endl;
             if (status == PlanStatus::BUSY)
-                cout << "BUSY" << endl; 
+                std::cout << "BUSY" << std::endl; 
         }
 
         const vector<Facility*>& Plan::getFacilities() const
