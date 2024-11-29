@@ -27,6 +27,9 @@ class Plan {
         // complete - Rule of 5
         Plan& operator=(const Plan& other) = delete;
         Plan& operator=(const Plan&& other) = delete;
+        ~Plan();
+        Plan(const Plan& other);
+        Plan(Plan&& other);
         
     private:
         int plan_id;
