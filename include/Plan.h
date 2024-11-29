@@ -22,6 +22,12 @@ class Plan {
         const vector<Facility*> &getFacilities() const;
         void addFacility(Facility* facility);
         const string toString() const;
+        int limit(const Settlement& settle); // return the limit to construction facility
+        const std::string getStatus();
+        // complete - Rule of 5
+        void operator=(const Plan& other) = delete;
+
+
 
     private:
         int plan_id;

@@ -20,3 +20,5 @@ run:
 clean:
 	@echo "Cleaning bin directory"
 	rm -f bin/*
+
+valgrind --leak-check=full --show-reachable=yes [program-name] [program parameters].
