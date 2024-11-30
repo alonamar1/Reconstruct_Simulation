@@ -50,8 +50,6 @@
             if (forDelete.size() > 0) {
                 status = PlanStatus::AVALIABLE;
             }
-
-
         }
 
         // return the limit to construction facility 
@@ -64,8 +62,7 @@
             }
             if (settle.getType() == SettlementType::METROPOLIS) {
                 return 3;
-            }
-            
+            }    
         }
 
         void Plan::printStatus()
@@ -103,32 +100,31 @@
         Plan::~Plan() {
         // Clean up dynamically allocated memory for facilities under construction
         for (Facility* facility : underConstruction) {
-            delete facility;  // Free the dynamically allocated Facility object
+            delete facility;
         }
-        // No need to delete objects in 'facilities' because they are not dynamically allocated here
-        
-    }
+        // Clean up dynamically allocated memory for opersions facilities
+        for (Facility* facility : facilities) {
+            delete facility;
+        }
+        // Delete the Selected Policy object
+        delete selectionPolicy;
+        }
 
         Plan::Plan(const Plan& other) 
-    : plan_id(other.plan_id), 
-      settlement(other.settlement), 
-      selectionPolicy(other.selectionPolicy), 
-      facilityOptions(other.facilityOptions), 
-      status(other.status), 
-      life_quality_score(other.life_quality_score),
-      economy_score(other.economy_score), 
-      environment_score(other.environment_score)
-{
-    // Deep copy the 'underConstruction' vector
-    for (Facility* f : other.underConstruction) {
-        underConstruction.push_back(new Facility(*f)); // Create a copy of each Facility
-    }
-    
-    // Deep copy the 'facilities' vector
-    for (Facility* f : other.facilities) {
-        facilities.push_back(new Facility(*f)); // Create a copy of each Facility
-    }
-}
+        : plan_id(other.plan_id), settlement(other.settlement), facilityOptions(other.facilityOptions), 
+        status(other.status), life_quality_score(other.life_quality_score), economy_score(other.economy_score), environment_score(other.environment_score)
+        {
+        selectionPolicy = other.selectionPolicy->clone();
+        // Deep copy the 'underConstruction' vector
+        for (Facility* f : other.underConstruction) {
+            underConstruction.push_back(new Facility(*f)); // Create a copy of each Facility
+        }
+        
+        // Deep copy the 'facilities' vector
+        for (Facility* f : other.facilities) {
+            facilities.push_back(new Facility(*f)); // Create a copy of each Facility
+            }
+        }
 
 
 Plan::Plan(Plan&& other) //noexcept 
@@ -143,11 +139,10 @@ Plan::Plan(Plan&& other) //noexcept
       underConstruction(std::move(other.underConstruction)),
       facilities(std::move(other.facilities))
 {
-    // Reset the source object (optional, depending on how other resources should be reset)
-    other.status = PlanStatus::AVALIABLE;
-    other.life_quality_score = 0;
-    other.economy_score = 0;
-    other.environment_score = 0;
+    // Reset the source object
+    other.underConstruction = vector<Facility*>();
+    other.facilities = vector<Facility*>();
+    selectionPolicy = nullptr;
 }
 
 

@@ -10,7 +10,7 @@ int main(int argc, char** argv){
         cout << "usage: simulation <config_path>" << endl;
         return 0;
     }
-    string configurationFile = argv[1];
+    //string configurationFile = argv[1];
     //Simulation simulation(configurationFile);
     //simulation.start();
     

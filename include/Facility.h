@@ -25,6 +25,8 @@ class FacilityType {
         int getEnvironmentScore() const;
         int getEconomyScore() const;
         FacilityCategory getCategory() const;
+        static FacilityStatus StringToFacilityStatus (const string& st); 
+        static FacilityCategory StringToFacilityCategory (const string& st); 
 
     protected:
         const string name;
@@ -34,7 +36,6 @@ class FacilityType {
         const int economy_score;
         const int environment_score;
 };
-
 
 
 class Facility: public FacilityType {

@@ -29,15 +29,15 @@ class Plan {
         Plan& operator=(const Plan&& other) = delete;
         ~Plan();
         Plan(const Plan& other);
-        Plan(Plan&& other);
+        Plan(Plan&& other); // move func
         
     private:
         int plan_id;
         const Settlement &settlement;
-        SelectionPolicy *selectionPolicy; //What happens if we change this to a reference?
+        SelectionPolicy *selectionPolicy;
         PlanStatus status;
         vector<Facility*> facilities;
         vector<Facility*> underConstruction;
-        const vector<FacilityType> &facilityOptions;
+        const vector<FacilityType>& facilityOptions;
         int life_quality_score, economy_score, environment_score;
 };

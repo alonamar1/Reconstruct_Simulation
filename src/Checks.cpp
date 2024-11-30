@@ -1,12 +1,28 @@
 #include "Settlement.h"
 #include "Facility.h"
 #include "SelectionPolicy.h"
+#include "Plan.h"
+#include "Auxiliary.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
 int main(int argc, char** argv){
     string configurationFile = argv[1];
+    vector<string> config_File = Auxiliary::parseArguments(configurationFile);
+    ifstream File(configurationFile);
+    string line;
+    while (getline(File, line)) {
+        cout << line << endl;
+    }
+    // for (string s: config_File) {
+    //     std::cout << s << std::endl;
+    // }
+
+
+
+/*
     //Check blanced policy
     Settlement *s1 = new Settlement("Tel aviv", SettlementType::CITY);
     cout << s1->toString() << endl;
@@ -20,17 +36,21 @@ int main(int argc, char** argv){
     v.push_back(*Park);
     v.push_back(*Factory);
 
-    BalancedSelection pol(5, 4, 3);
-    cout << pol.toString() << endl;
-    cout << pol.selectFacility(v).getName() << endl;
-    cout << pol.toString() << endl;
-    //cout << std::to_string(hospital->getCost()) << endl; */
-    
-    delete s1;
-    delete hospital;
-    delete School;
-    delete Park;
-    delete Factory;
+    BalancedSelection *pol = new BalancedSelection(5, 4, 3);
+    cout << pol->toString() << endl;
+    cout << pol->selectFacility(v).getName() << endl;
+    cout << pol->toString() << endl;
+    //cout << std::to_string(hospital->getCost()) << endl; 
+    const int id = 1;
 
+    Plan *p1 = new Plan(id, *s1, pol, v);
+
+    delete p1;
+    delete s1;
+    //delete hospital;
+    //delete School;
+    //delete Park;
+    //delete Factory;
+        */
     return 0;
 }

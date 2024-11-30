@@ -1,5 +1,6 @@
 #include "Facility.h"
 
+//--------------FacilityType---------------------//
 FacilityType::FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
 : name(name), category(category), price(price), lifeQuality_score(lifeQuality_score), economy_score(economy_score), environment_score(environment_score) {}
 
@@ -21,7 +22,17 @@ int FacilityType::getEconomyScore() const {
 FacilityCategory FacilityType::getCategory() const {
     return category;
 }
+static FacilityStatus StringToFacilityStatus (const string& st) {
+    if (st == "0") { return FacilityStatus::UNDER_CONSTRUCTIONS; }
+    if (st == "1") { return FacilityStatus::OPERATIONAL; }
+}
+static FacilityCategory StringToFacilityCategory (const string& st) {
+    if (st == "0") { return FacilityCategory::LIFE_QUALITY; }
+    if (st == "1") { return FacilityCategory::ECONOMY; }
+    if (st == "2") { return FacilityCategory::ENVIRONMENT; }
+}
 
+//--------------Facility---------------------//
 Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
 : FacilityType(name, category, price, lifeQuality_score, economy_score, environment_score), settlementName(settlementName), status(FacilityStatus::UNDER_CONSTRUCTIONS), timeLeft(price)  {}
 

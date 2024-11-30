@@ -18,6 +18,7 @@ class Settlement {
         const string &getName() const;
         SettlementType getType() const;
         const string toString() const;
+        static SettlementType StringToSettlementType (const string&); 
 
         private:
             const string name;

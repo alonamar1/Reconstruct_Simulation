@@ -17,5 +17,11 @@ const string Settlement::toString() const {
         return "Settlement Name is: " + name + ", Settlement type is: metropolis";
 }
 
+SettlementType Settlement::StringToSettlementType(const string& st) {
+    if (st == "0") { return SettlementType::VILLAGE; }
+    if (st == "1") { return SettlementType::CITY; }
+    if (st == "2") { return SettlementType::METROPOLIS; }
+}
+
 
 
