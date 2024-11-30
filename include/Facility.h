@@ -26,6 +26,7 @@ class FacilityType {
         int getEconomyScore() const;
         FacilityCategory getCategory() const;
         static FacilityStatus StringToFacilityStatus (const string& st); 
+        
         static FacilityCategory StringToFacilityCategory (const string& st); 
 
     protected:
