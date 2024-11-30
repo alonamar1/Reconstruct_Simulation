@@ -24,7 +24,7 @@ class Plan {
         const string toString() const;
         int limit(const Settlement& settle); // return the limit to construction facility
         const std::string getStatus();
-        // complete - Rule of 5
+        // complete - Rule of 5 //
         Plan& operator=(const Plan& other) = delete;
         Plan& operator=(const Plan&& other) = delete;
         ~Plan();
