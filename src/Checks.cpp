@@ -3,6 +3,7 @@
 #include "SelectionPolicy.h"
 #include "Plan.h"
 #include "Auxiliary.h"
+#include "Simulation.h"
 #include <iostream>
 #include <fstream>
 
@@ -10,16 +11,14 @@ using namespace std;
 
 int main(int argc, char** argv){
     string configurationFile = argv[1];
-    vector<string> config_File = Auxiliary::parseArguments(configurationFile);
-    ifstream File(configurationFile);
-    string line;
-    while (getline(File, line)) {
-        cout << line << endl;
-    }
+    Simulation simul(configurationFile);
     // for (string s: config_File) {
     //     std::cout << s << std::endl;
     // }
+    Settlement *s1 = new Settlement("Tel aviv", SettlementType::CITY);
+    cout << s1->toString() << endl;
 
+    delete s1;
 
 
 /*

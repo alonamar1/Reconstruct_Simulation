@@ -25,6 +25,9 @@ class Simulation {
         void close();
         void open();
 
+        static Settlement* find_Settlemnt(vector<Settlement*> settlement, const string& nameS);
+        static SelectionPolicy* create_Policy(const string& typeP);
+
     private:
         bool isRunning;
         int planCounter; //For assigning unique plan IDs

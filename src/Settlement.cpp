@@ -18,9 +18,9 @@ const string Settlement::toString() const {
 }
 
 SettlementType Settlement::StringToSettlementType(const string& st) {
-    if (st == "0") { return SettlementType::VILLAGE; }
-    if (st == "1") { return SettlementType::CITY; }
-    if (st == "2") { return SettlementType::METROPOLIS; }
+    if (st.compare("0") == 0) { return SettlementType::VILLAGE; }
+    if (st.compare("1") == 0) { return SettlementType::CITY; }
+    if (st.compare("2") == 0) { return SettlementType::METROPOLIS; }
 }
 
 

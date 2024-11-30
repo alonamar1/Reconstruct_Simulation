@@ -22,14 +22,14 @@ int FacilityType::getEconomyScore() const {
 FacilityCategory FacilityType::getCategory() const {
     return category;
 }
-static FacilityStatus StringToFacilityStatus (const string& st) {
-    if (st == "0") { return FacilityStatus::UNDER_CONSTRUCTIONS; }
-    if (st == "1") { return FacilityStatus::OPERATIONAL; }
+FacilityStatus FacilityType::StringToFacilityStatus (const string& st) {
+    if (st.compare("0") == 0) { return FacilityStatus::UNDER_CONSTRUCTIONS; }
+    if (st.compare("1") == 0) { return FacilityStatus::OPERATIONAL; }
 }
-static FacilityCategory StringToFacilityCategory (const string& st) {
-    if (st == "0") { return FacilityCategory::LIFE_QUALITY; }
-    if (st == "1") { return FacilityCategory::ECONOMY; }
-    if (st == "2") { return FacilityCategory::ENVIRONMENT; }
+FacilityCategory FacilityType::StringToFacilityCategory (const string& st) {
+    if (st.compare("0") == 0) { return FacilityCategory::LIFE_QUALITY; }
+    if (st.compare("1") == 0) { return FacilityCategory::ECONOMY; }
+    if (st.compare("2") == 0) { return FacilityCategory::ENVIRONMENT; }
 }
 
 //--------------Facility---------------------//

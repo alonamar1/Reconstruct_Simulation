@@ -5,7 +5,7 @@ all: clean link run checkMemo
 
 link: compile
 	@echo "Linking object files"
-	g++ -o bin/main bin/Checks.o bin/Settlement.o bin/Auxiliary.o bin/Facility.o bin/SelectionPolicy.o bin/Plan.o
+	g++ -o bin/main bin/Checks.o bin/Settlement.o bin/Auxiliary.o bin/Facility.o bin/SelectionPolicy.o bin/Plan.o bin/Simulation.o
 
 compile: src/main.cpp src/Auxiliary.cpp
 	@echo "Compiling source code"
@@ -16,7 +16,9 @@ compile: src/main.cpp src/Auxiliary.cpp
 	g++ -g -I "include/" -c -Wall -Weffc++ -std=c++11 -o bin/SelectionPolicy.o src/SelectionPolicy.cpp
 	g++ -g -I "include/" -c -Wall -Weffc++ -std=c++11 -o bin/Checks.o src/Checks.cpp
 	g++ -g -I "include/" -c -Wall -Weffc++ -std=c++11 -o bin/Plan.o src/Plan.cpp
+	g++ -g -I "include/" -c -Wall -Weffc++ -std=c++11 -o bin/Simulation.o src/Simulation.cpp
 run:
+	@echo "Run Program"
 	./bin/main config_file.txt
 
 clean:
