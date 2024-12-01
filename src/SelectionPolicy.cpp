@@ -1,5 +1,15 @@
 #pragma once
 #include "SelectionPolicy.h"
+//--------------SelectionPolicy---------------------//
+bool SelectionPolicy::isTrueSelectionPolicy(const string &Selectionpolicy)
+        {
+          if ((Selectionpolicy.compare("nve")==0) || (Selectionpolicy.compare("eco")==0) ||
+                 (Selectionpolicy.compare("bal")==0) || (Selectionpolicy.compare("env")==0))
+        {
+                return true;
+        }
+        return false;
+}
 
 //--------------NaiveSelection---------------------//
         NaiveSelection::NaiveSelection(): lastSelectedIndex(-1){} // when we add 1 in "selectSelection" func it wil start in index 0 
@@ -135,5 +145,6 @@
                 return "Last selected Index: " + std::to_string(lastSelectedIndex);
         }
         
+         
 
 

@@ -110,6 +110,11 @@
         delete selectionPolicy;
         }
 
+        const int Plan::getID() const
+        {
+            return plan_id;
+        }
+
         Plan::Plan(const Plan& other) 
         : plan_id(other.plan_id), settlement(other.settlement), facilityOptions(other.facilityOptions), 
         status(other.status), life_quality_score(other.life_quality_score), economy_score(other.economy_score), environment_score(other.environment_score)

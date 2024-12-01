@@ -10,6 +10,7 @@ class SelectionPolicy {
         virtual SelectionPolicy* clone() const = 0;
         virtual ~SelectionPolicy() = default;
         virtual SelectionPolicy& operator=(const SelectionPolicy& other) = default;
+        static bool isTrueSelectionPolicy(const string &Selectionpolicy);
 };
 
 class NaiveSelection: public SelectionPolicy {
