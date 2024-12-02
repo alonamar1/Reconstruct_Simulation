@@ -23,5 +23,13 @@ SettlementType Settlement::StringToSettlementType(const string& st) {
     if (st.compare("2") == 0) { return SettlementType::METROPOLIS; }
 }
 
+string Settlement::settlementTypeToString(SettlementType st)
+{
+    if (st ==  SettlementType::VILLAGE) { return "village"; }
+    if (st ==  SettlementType::CITY) { return "city"; }
+    if (st == SettlementType::METROPOLIS) { return "metropolis"; }
+}
+
+
 
 

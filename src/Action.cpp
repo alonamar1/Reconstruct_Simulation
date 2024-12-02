@@ -1,6 +1,7 @@
 
 #pragma once
 #include "Action.h"
+#include <iostream>
 
 BaseAction::BaseAction() : errorMsg(""), status(ActionStatus::ERROR) {}
 
@@ -62,7 +63,7 @@ void AddPlan::act(Simulation &simulation)
 
 const string AddPlan::toString() const
 {
-    return "settlement name: " + settlementName + "/n" + "selection policy: " + selectionPolicy;
+    return "settlement name: " + settlementName + "\n" + "selection policy: " + selectionPolicy;
 }
 
 AddPlan *AddPlan::clone() const
@@ -71,10 +72,91 @@ AddPlan *AddPlan::clone() const
 }
 
 // class addsettlement
-AddSettlement::AddSettlement(const string &settlementName, SettlementType settlementType);
-void AddSettlement::act(Simulation &simulation) override;
-AddSettlement *AddSettlement::clone() const override;
-const string AddSettlement::toString() const override;
+AddSettlement::AddSettlement(const string &settlementName, SettlementType settlementType) : BaseAction(), settlementName(settlementName), settlementType(settlementType) {}
+void AddSettlement::act(Simulation &simulation)
+{
+    bool result = simulation.addSettlement(new Settlement(settlementName, settlementType));
+    if (!result)
+    {
+        error("settlement already exist");
+    }
+    else
+        complete();
+}
 
-const string settlementName;
-const SettlementType settlementType;
+AddSettlement *AddSettlement::clone() const
+{
+    return new AddSettlement(settlementName, settlementType);
+}
+
+const string AddSettlement::toString() const
+{
+    return "settlement name: " + settlementName + "\n" + "settlement type: " + Settlement::settlementTypeToString(settlementType);
+}
+
+// addfacility
+
+AddFacility::AddFacility(const string &facilityName, const FacilityCategory facilityCategory, const int price, const int lifeQualityScore, const int economyScore, const int environmentScore) : BaseAction(), facilityName(facilityName), facilityCategory(facilityCategory), price(price), lifeQualityScore(lifeQualityScore), economyScore(economyScore), environmentScore(environmentScore) {}
+void AddFacility::act(Simulation &simulation)
+{
+    bool result = simulation.addFacility(FacilityType(facilityName, facilityCategory, price, lifeQualityScore, economyScore, environmentScore));
+    if (!result)
+    {
+        error("facility already exist");
+    }
+    else
+        complete();
+}
+AddFacility *AddFacility::clone() const
+{
+    return new AddFacility(facilityName, facilityCategory, price, lifeQualityScore, economyScore, environmentScore);
+}
+
+const string AddFacility::toString() const
+{
+    string cat;
+    if (facilityCategory == FacilityCategory::LIFE_QUALITY)
+        cat = "Life Quality";
+    if (facilityCategory == FacilityCategory::ECONOMY)
+        cat = "Economy";
+    if (facilityCategory == FacilityCategory::ENVIRONMENT)
+        cat = "Environment";
+    
+    return "Facility: " + facilityName +
+    "\nCategory: " + cat +
+    "\nprice: " + std::to_string(price) +
+    "\nLife Quality Score: "+ std::to_string(lifeQualityScore) +
+    "\nEconomy Score: " +std::to_string(economyScore) +
+    "\nEnvironment Score: " + std::to_string(environmentScore);
+}
+
+//print plan status
+PrintPlanStatus::PrintPlanStatus(int planId):
+BaseAction(), planId(planId){}
+void PrintPlanStatus::act(Simulation &simulation)
+{   
+    if (simulation.isPlanExists(planId))
+    {
+            std::cout << simulation.getPlan(planId).toString() << std::endl;
+            complete();
+    }
+    else 
+    {
+        error("plan doesn't exist");
+    }
+    
+}
+
+PrintPlanStatus* PrintPlanStatus::clone() const
+{
+    return new PrintPlanStatus(planId);
+}
+
+const string PrintPlanStatus::toString() const
+{
+    return "plan ID: " + planId;
+}
+
+
+
+

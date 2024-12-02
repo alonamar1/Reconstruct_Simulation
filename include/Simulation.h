@@ -16,10 +16,11 @@ public:
     Simulation(const string &configFilePath);
     void start();
     void addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy);
-    // void addAction(BaseAction *action);
+    void addAction(BaseAction *action);
     bool addSettlement(Settlement *settlement);
     bool addFacility(FacilityType facility);
     bool isSettlementExists(const string &settlementName);
+    bool isPlanExists(int planID);
     Settlement &getSettlement(const string &settlementName);
     Plan &getPlan(const int planID);
     void step();
@@ -28,6 +29,8 @@ public:
 
     static Settlement *find_Settlemnt(vector<Settlement *> settlement, const string &nameS);
     static SelectionPolicy *create_Policy(const string &typeP);
+    // Rule of 5:
+
 
 private:
     bool isRunning;

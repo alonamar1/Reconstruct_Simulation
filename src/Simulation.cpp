@@ -67,6 +67,7 @@ void Simulation::start()
     open();
     while (isRunning)
     {
+
     }
 }
 
@@ -107,6 +108,16 @@ bool Simulation::isSettlementExists(const string &settlementName)
     return false;
 }
 
+bool Simulation::isPlanExists(int planID)
+{
+    for (Plan p : plans)
+    {
+        if (p.getID() == planID)
+            return true;
+    }
+    return false;
+}
+
 Settlement &Simulation::getSettlement(const string &settlementName)
 {
     for (Settlement *s : settlements)
@@ -117,6 +128,7 @@ Settlement &Simulation::getSettlement(const string &settlementName)
         }
     }
 }
+
 Plan &Simulation::getPlan(const int planID)
 {
     for (Plan p : plans)
@@ -141,4 +153,5 @@ void Simulation::open()
 void Simulation::close()
 {
     isRunning = false;
+    // complete
 }
