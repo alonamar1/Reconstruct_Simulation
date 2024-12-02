@@ -83,20 +83,42 @@
             life_quality_score += facility->getLifeQualityScore();
             economy_score += facility->getEconomyScore();
             environment_score += facility->getEconomyScore();
+            
+        }
+        const SelectionPolicy* Plan::getSelectionPolicy() const {
+            return selectionPolicy;
         }
 
-        /*const string Plan::toString() const {
-            string s = nullptr;
+        const vector<Facility*> Plan::getUnderConstruction() const {
+            return underConstruction;
+        }
+
+        const string Plan::toString() const {
+            string s = nullptr, facilitiesString = "";
             if (status == PlanStatus::AVALIABLE)
                 s = "AVAILABLE";
             if (status == PlanStatus::BUSY)
                 s = "BUSY";
+            for (Facility* f : facilities)
+            {
+                facilitiesString += "FacilityName: " + f->getName() +"\n" + 
+                "FacilityStatus: " + f->getStringStatus() + "\n";
+            }
+             for (Facility* f : underConstruction)
+            {
+                facilitiesString += "FacilityName: " + f->getName() +"\n" + 
+                "FacilityStatus: " + f->getStringStatus() + "\n";
+            }
             return "Plan ID: " + std::to_string(plan_id) + "\n" +
-                "Settlement: " + settlement.getName() + "\n" + 
+                "SettlementName: " + settlement.getName() + "\n" + 
                 "PlanStatus: " + s + "\n" + 
-                ""
-
-        }*/
+                "SelectionPolicy: " + selectionPolicy->getPolicyType() + "\n" + 
+                "LifeQualityScore: " + std::to_string(life_quality_score) + "\n" + 
+                "EconomyScore: " + std::to_string(economy_score) + "\n" + 
+                "EnvironmentScore: " + std::to_string(environment_score) + "\n" + 
+                facilitiesString;
+                
+        }
         Plan::~Plan() {
         // Clean up dynamically allocated memory for facilities under construction
         for (Facility* facility : underConstruction) {

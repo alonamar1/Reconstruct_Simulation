@@ -58,6 +58,12 @@ void Facility::setStatus(FacilityStatus status) {
 const FacilityStatus& Facility::getStatus() const {
     return status;
 }
+const string Facility::getStringStatus() const {
+    if (status == FacilityStatus::OPERATIONAL)
+        return "OPERATIONAL";
+    if (status == FacilityStatus::UNDER_CONSTRUCTIONS)
+        return "UNDER_CONSTRUCTIONS";  
+}
 const string Facility::toString() const {
     string cat;
     string stat;

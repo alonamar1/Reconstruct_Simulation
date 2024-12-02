@@ -15,7 +15,7 @@ Settlement *Simulation::find_Settlemnt(vector<Settlement *> settlement, const st
     }
 }
 
-SelectionPolicy *Simulation::create_Policy(const string &typeP)
+SelectionPolicy *Simulation::create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore)
 {
     if (typeP.compare("eco") == 0)
     {
@@ -23,7 +23,7 @@ SelectionPolicy *Simulation::create_Policy(const string &typeP)
     }
     else if (typeP.compare("bal") == 0)
     {
-        return new BalancedSelection(0, 0, 0);
+        return new BalancedSelection(lqScore, ecoScore, envScore);
     }
     else if (typeP.compare("env") == 0)
     {
@@ -57,7 +57,7 @@ Simulation::Simulation(const string &configFilePath) : isRunning(false), planCou
         }
         if (config_Line[0].compare("plan") == 0)
         {
-            addPlan(*find_Settlemnt(settlements, config_Line[1]), create_Policy(config_Line[2]));
+            addPlan(*find_Settlemnt(settlements, config_Line[1]), create_Policy(config_Line[2], 0, 0, 0));
         }
     }
 }
@@ -71,12 +71,19 @@ void Simulation::start()
     }
 }
 
+
+
 void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy)
 {
     Plan p1(planCounter, settlement, selectionPolicy, facilitiesOptions);
     plans.push_back(p1);
     planCounter++;
 }
+
+void Simulation::addAction(BaseAction *action) {
+    actionsLog.push_back(action);
+}
+
 bool Simulation::addSettlement(Settlement *settlement)
 {
     if (isSettlementExists(settlement->getName()) == true)
@@ -108,6 +115,17 @@ bool Simulation::isSettlementExists(const string &settlementName)
     return false;
 }
 
+const vector<BaseAction*> Simulation::getActionsLog() const
+{
+    return actionsLog;
+}
+
+const vector<Plan> Simulation::getPlans() const
+{
+    return plans;
+}
+
+
 bool Simulation::isPlanExists(int planID)
 {
     for (Plan p : plans)
@@ -129,7 +147,7 @@ Settlement &Simulation::getSettlement(const string &settlementName)
     }
 }
 
-Plan &Simulation::getPlan(const int planID)
+Plan& Simulation::getPlan(const int planID)
 {
     for (Plan p : plans)
     {

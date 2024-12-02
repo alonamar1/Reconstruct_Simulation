@@ -1,6 +1,8 @@
 #pragma once
 #include "SelectionPolicy.h"
 //--------------SelectionPolicy---------------------//
+SelectionPolicy::SelectionPolicy(const string &policytype) : policyType(policyType) {}
+
 bool SelectionPolicy::isTrueSelectionPolicy(const string &Selectionpolicy)
 {
         if ((Selectionpolicy.compare("nve") == 0) || (Selectionpolicy.compare("eco") == 0) ||
@@ -11,9 +13,14 @@ bool SelectionPolicy::isTrueSelectionPolicy(const string &Selectionpolicy)
         return false;
 }
 
+const string &SelectionPolicy::getPolicyType() const
+{
+        return policyType;
+}
+
 //--------------NaiveSelection---------------------//
-NaiveSelection::NaiveSelection() : lastSelectedIndex(-1) {} // when we add 1 in "selectSelection" func it wil start in index 0
-NaiveSelection::NaiveSelection(int i) : lastSelectedIndex(i) {}
+NaiveSelection::NaiveSelection() : SelectionPolicy("nve"), lastSelectedIndex(-1) {} // when we add 1 in "selectSelection" func it wil start in index 0
+NaiveSelection::NaiveSelection(int i) : SelectionPolicy("nve"), lastSelectedIndex(i) {}
 const FacilityType &NaiveSelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
         lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size(); // Cycling on vector size
@@ -30,7 +37,7 @@ NaiveSelection *NaiveSelection::clone() const
 
 //--------------BalancedSelection---------------------//
 BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int EnvironmentScore)
-    : LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore) {}
+    : SelectionPolicy("bal"), LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore) {}
 
 const FacilityType &BalancedSelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
@@ -86,8 +93,8 @@ void BalancedSelection::UpdateScores(BalancedSelection &pol, int quality, int ec
 }
 
 //--------------EconomySelection---------------------//
-EconomySelection::EconomySelection() : lastSelectedIndex(0) {}
-EconomySelection::EconomySelection(int i) : lastSelectedIndex(i) {}
+EconomySelection::EconomySelection() : SelectionPolicy("eco"), lastSelectedIndex(0) {}
+EconomySelection::EconomySelection(int i) : SelectionPolicy("eco"), lastSelectedIndex(i) {}
 const FacilityType &EconomySelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
         bool found = false;
@@ -118,8 +125,8 @@ const string EconomySelection::toString() const
 }
 
 //--------------SustainabilitySelection---------------------//
-SustainabilitySelection::SustainabilitySelection() : lastSelectedIndex(0) {}
-SustainabilitySelection::SustainabilitySelection(int i) : lastSelectedIndex(i) {}
+SustainabilitySelection::SustainabilitySelection() : SelectionPolicy("env"), lastSelectedIndex(0) {}
+SustainabilitySelection::SustainabilitySelection(int i) : SelectionPolicy("env"), lastSelectedIndex(i) {}
 
 const FacilityType &SustainabilitySelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {

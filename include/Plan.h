@@ -27,6 +27,8 @@ public:
     int limit(const Settlement &settle); // return the limit to construction facility
     const std::string getStatus();
     const int getID() const; // returns the plan's ID
+    const SelectionPolicy* getSelectionPolicy() const;
+    const vector<Facility*> getUnderConstruction() const;
     // complete - Rule of 5 //
     Plan &operator=(const Plan &other) = delete;
     Plan &operator=(const Plan &&other) = delete;

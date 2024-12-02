@@ -12,6 +12,13 @@ public:
     virtual ~SelectionPolicy() = default;
     virtual SelectionPolicy &operator=(const SelectionPolicy &other) = default;
     static bool isTrueSelectionPolicy(const string &Selectionpolicy);
+    const string &getPolicyType() const;
+
+protected:
+    SelectionPolicy(const string &policytype);
+
+private:
+    string policyType;
 };
 
 class NaiveSelection : public SelectionPolicy

@@ -22,13 +22,15 @@ public:
     bool isSettlementExists(const string &settlementName);
     bool isPlanExists(int planID);
     Settlement &getSettlement(const string &settlementName);
+    const vector<BaseAction*> getActionsLog() const;
+    const vector<Plan> getPlans()const ;
     Plan &getPlan(const int planID);
     void step();
     void close();
     void open();
 
     static Settlement *find_Settlemnt(vector<Settlement *> settlement, const string &nameS);
-    static SelectionPolicy *create_Policy(const string &typeP);
+    static SelectionPolicy *create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore);
     // Rule of 5:
 
 
