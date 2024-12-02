@@ -173,3 +173,21 @@ void Simulation::close()
     isRunning = false;
     // complete
 }
+
+Simulation::Simulation(const Simulation &other): isRunning(other.isRunning), planCounter(other.planCounter),
+actionsLog(vector<BaseAction*>()), plans(vector<Plan>()), settlements(vector<Settlement*>()), facilitiesOptions(vector<FacilityType>())
+{
+    for (int i = 0; i < other.actionsLog.size(); i++) {
+        actionsLog.push_back(other.actionsLog[i]);
+    }
+    for (int i = 0; i < other.plans.size(); i++) {
+        plans.push_back(other.plans[i]);
+    }
+    for (int i = 0; i < other.settlements.size(); i++) {
+        settlements.push_back(other.settlements[i]);
+    }
+    for (int i = 0; i < other.facilitiesOptions.size(); i++) {
+        facilitiesOptions.push_back(other.facilitiesOptions[i]);
+    }
+}
+
