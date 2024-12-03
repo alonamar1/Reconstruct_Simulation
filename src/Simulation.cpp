@@ -96,7 +96,7 @@ bool Simulation::addSettlement(Settlement *settlement)
 
 bool Simulation::addFacility(FacilityType facility)
 {
-    for (FacilityType f : facilitiesOptions)
+    for (const FacilityType& f : facilitiesOptions)
     {
         if (f.getName().compare(facility.getName()) == 0)
             return false;
@@ -128,7 +128,7 @@ const vector<Plan> Simulation::getPlans() const
 
 bool Simulation::isPlanExists(int planID)
 {
-    for (Plan p : plans)
+    for (const Plan& p : plans)
     {
         if (p.getID() == planID)
             return true;
@@ -149,7 +149,7 @@ Settlement &Simulation::getSettlement(const string &settlementName)
 
 Plan& Simulation::getPlan(const int planID)
 {
-    for (Plan p : plans)
+    for (Plan& p : plans)
     {
         if (p.getID() == planID)
         {
@@ -157,9 +157,10 @@ Plan& Simulation::getPlan(const int planID)
         }
     }
 }
+
 void Simulation::step()
 {
-    for (Plan p : plans)
+    for (Plan& p : plans)
     {
         p.step();
     }
@@ -177,15 +178,19 @@ void Simulation::close()
 Simulation::Simulation(const Simulation &other): isRunning(other.isRunning), planCounter(other.planCounter),
 actionsLog(vector<BaseAction*>()), plans(vector<Plan>()), settlements(vector<Settlement*>()), facilitiesOptions(vector<FacilityType>())
 {
+    // Coopying Acions
     for (int i = 0; i < other.actionsLog.size(); i++) {
         actionsLog.push_back(other.actionsLog[i]);
     }
+    // Coopying Plans
     for (int i = 0; i < other.plans.size(); i++) {
         plans.push_back(other.plans[i]);
     }
+    // Coopying Settlements
     for (int i = 0; i < other.settlements.size(); i++) {
         settlements.push_back(other.settlements[i]);
     }
+    // Coopying Facilities 
     for (int i = 0; i < other.facilitiesOptions.size(); i++) {
         facilitiesOptions.push_back(other.facilitiesOptions[i]);
     }

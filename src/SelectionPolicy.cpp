@@ -3,7 +3,7 @@
 //--------------SelectionPolicy---------------------//
 //---------funcions we've added-----------// 
 
-SelectionPolicy::SelectionPolicy(const string &policytype) : policyType(policyType) {}
+SelectionPolicy::SelectionPolicy(const string& policytype) : policyType(policytype) {}
 
 bool SelectionPolicy::isTrueSelectionPolicy(const string &Selectionpolicy)
 {

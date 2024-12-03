@@ -23,7 +23,7 @@ protected:
 //---------filed we've added-----------// 
 
 private:
-    string policyType; 
+    const string policyType; 
 };
 
 class NaiveSelection : public SelectionPolicy
