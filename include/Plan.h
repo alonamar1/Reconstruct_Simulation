@@ -24,17 +24,19 @@ public:
     const vector<Facility *> &getFacilities() const;
     void addFacility(Facility *facility);
     const string toString() const;
-    int limit(const Settlement &settle); // return the limit to construction facility
     const std::string getStatus();
-    const int getID() const; // returns the plan's ID
-    const SelectionPolicy* getSelectionPolicy() const;
-    const vector<Facility*> getUnderConstruction() const;
-    // complete - Rule of 5 //
+    
+    //---------funcions we've added-----------// 
+        const int getID() const; // returns the plan's ID
+
+    int limit(const Settlement &settle); // return the limit to construction facility
     Plan &operator=(const Plan &other) = delete;
     Plan &operator=(const Plan &&other) = delete;
     ~Plan();
     Plan(const Plan &other);
     Plan(Plan &&other); // move func
+    const SelectionPolicy* getSelectionPolicy() const;
+    const vector<Facility*> getUnderConstruction() const;
 
 private:
     int plan_id;

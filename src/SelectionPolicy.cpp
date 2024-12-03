@@ -1,6 +1,8 @@
 #pragma once
 #include "SelectionPolicy.h"
 //--------------SelectionPolicy---------------------//
+//---------funcions we've added-----------// 
+
 SelectionPolicy::SelectionPolicy(const string &policytype) : policyType(policyType) {}
 
 bool SelectionPolicy::isTrueSelectionPolicy(const string &Selectionpolicy)

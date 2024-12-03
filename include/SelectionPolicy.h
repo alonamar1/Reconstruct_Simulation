@@ -11,14 +11,19 @@ public:
     virtual SelectionPolicy *clone() const = 0;
     virtual ~SelectionPolicy() = default;
     virtual SelectionPolicy &operator=(const SelectionPolicy &other) = default;
+
+//---------funcions we've added-----------// 
+
     static bool isTrueSelectionPolicy(const string &Selectionpolicy);
     const string &getPolicyType() const;
 
 protected:
     SelectionPolicy(const string &policytype);
 
+//---------filed we've added-----------// 
+
 private:
-    string policyType;
+    string policyType; 
 };
 
 class NaiveSelection : public SelectionPolicy
