@@ -1,5 +1,4 @@
 
-#pragma once
 #include "Action.h"
 #include <iostream>
 #include "main.cpp"
@@ -18,7 +17,7 @@ string BaseAction::getStringStatus() const
 {
     if (status == ActionStatus::ERROR)
         return "ERROR";
-    if (status == ActionStatus::COMPLETED)
+    else
         return "COMPLETED";
 }
 

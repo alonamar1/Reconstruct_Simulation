@@ -1,8 +1,9 @@
 #include "Plan.h"
 #include <iostream>
 
-Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) : plan_id(planId), settlement(settlement), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), status(PlanStatus::AVALIABLE), underConstruction(vector<Facility *>()),
-                                                                                                                                            facilities(vector<Facility *>()), life_quality_score(0), economy_score(0), environment_score(0) {}
+Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) : plan_id(planId), settlement(settlement), selectionPolicy(selectionPolicy), status(PlanStatus::AVALIABLE), facilities(vector<Facility *>()),
+                                                                                                                                            underConstruction(vector<Facility *>()), facilityOptions(facilityOptions),
+                                                                                                                                            life_quality_score(0), economy_score(0), environment_score(0) {}
 
 const int Plan::getlifeQualityScore() const
 {
@@ -64,11 +65,11 @@ int Plan::limit(const Settlement &settle)
     {
         return 1;
     }
-    if (settle.getType() == SettlementType::CITY)
+    else if (settle.getType() == SettlementType::CITY)
     {
         return 2;
     }
-    if (settle.getType() == SettlementType::METROPOLIS)
+    else
     {
         return 3;
     }
@@ -152,10 +153,10 @@ const int Plan::getID() const
 }
 
 Plan::Plan(const Plan &other)
-    : plan_id(other.plan_id), settlement(other.settlement), facilityOptions(other.facilityOptions),
-      status(other.status), life_quality_score(other.life_quality_score), economy_score(other.economy_score), environment_score(other.environment_score)
+    : plan_id(other.plan_id), settlement(other.settlement), selectionPolicy(other.selectionPolicy->clone()), status(other.status),
+      facilities(vector<Facility *>()), underConstruction(vector<Facility *>()), facilityOptions(other.facilityOptions),
+      life_quality_score(other.life_quality_score), economy_score(other.economy_score), environment_score(other.environment_score)
 {
-    selectionPolicy = other.selectionPolicy->clone();
     // Deep copy the 'underConstruction' vector
     for (Facility *f : other.underConstruction)
     {
@@ -173,13 +174,13 @@ Plan::Plan(Plan &&other) // noexcept
     : plan_id(other.plan_id),
       settlement(std::move(other.settlement)),
       selectionPolicy(other.selectionPolicy),
-      facilityOptions(std::move(other.facilityOptions)),
       status(other.status),
+      facilities(std::move(other.facilities)),
+      underConstruction(std::move(other.underConstruction)),
+      facilityOptions(std::move(other.facilityOptions)),
       life_quality_score(other.life_quality_score),
       economy_score(other.economy_score),
-      environment_score(other.environment_score),
-      underConstruction(std::move(other.underConstruction)),
-      facilities(std::move(other.facilities))
+      environment_score(other.environment_score)
 {
     // Reset the source object
     other.underConstruction = vector<Facility *>();

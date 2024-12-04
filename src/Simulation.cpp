@@ -1,10 +1,10 @@
-#pragma once
 #include "Simulation.h"
 #include "Auxiliary.h"
 #include "Settlement.h"
 #include <fstream>
 #include <iostream>
 
+// לבדוק האם אפשר למחוק את הפונקציה הזו!
 Settlement *Simulation::find_Settlemnt(vector<Settlement *> settlement, const string &nameS)
 {
     for (Settlement *s : settlement)
@@ -145,6 +145,7 @@ Settlement &Simulation::getSettlement(const string &settlementName)
             return *s;
         }
     }
+    throw std::runtime_error("Settlement with Name " + settlementName + " not found.");
 }
 
 Plan& Simulation::getPlan(const int planID)
@@ -156,6 +157,7 @@ Plan& Simulation::getPlan(const int planID)
             return p;
         }
     }
+    throw std::runtime_error("Plan with ID " + std::to_string(planID) + " not found.");
 }
 
 void Simulation::step()

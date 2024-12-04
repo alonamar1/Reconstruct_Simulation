@@ -1,4 +1,3 @@
-#pragma once
 #include "SelectionPolicy.h"
 //--------------SelectionPolicy---------------------//
 //---------funcions we've added-----------// 
