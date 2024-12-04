@@ -248,7 +248,7 @@ Simulation::Simulation(const Simulation &other) : isRunning(other.isRunning), pl
     for (std::size_t i = 0; i < other.settlements.size(); i++)
     {
         settlements.push_back(other.settlements[i]);
-    }
+    } // צריך לעשות פה עצמים חדשים ליישובים, ואז ליצור תוכניות חדשות עם היישובים החדשים ולא הישנים
     // Coopying Facilities
     for (std::size_t i = 0; i < other.facilitiesOptions.size(); i++)
     {
