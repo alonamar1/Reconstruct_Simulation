@@ -1,6 +1,8 @@
 #include "Simulation.h"
 #include "Auxiliary.h"
+#include "Action.h"
 #include "Settlement.h"
+#include "SelectionPolicy.h"
 #include <fstream>
 #include <iostream>
 
@@ -65,13 +67,66 @@ Simulation::Simulation(const string &configFilePath) : isRunning(false), planCou
 void Simulation::start()
 {
     open();
+    std::cout << "The simulation has started" << std::endl;
     while (isRunning)
     {
-
+        string user_input;
+        std::getline(std::cin, user_input);
+        vector<string> action_Line = Auxiliary::parseArguments(user_input);
+        BaseAction *inputAction;
+        if (action_Line[0].compare("step") == 0)
+        {
+            inputAction = new SimulateStep(std::stoi(action_Line[1]));
+        }
+        else if (action_Line[0].compare("plan") == 0)
+        {
+            inputAction = new AddPlan(action_Line[1], action_Line[2]);
+        }
+        else if (action_Line[0].compare("settlement") == 0)
+        {
+            inputAction = new AddSettlement(action_Line[1], Settlement::StringToSettlementType(action_Line[2]));
+        }
+        else if (action_Line[0].compare("facility") == 0)
+        {
+            inputAction = new AddFacility(action_Line[1],
+                                          FacilityType::StringToFacilityCategory(action_Line[2]), std::stoi(action_Line[3]), std::stoi(action_Line[4]),
+                                          std::stoi(action_Line[5]), std::stoi(action_Line[6]));
+        }
+        else if (action_Line[0].compare("planStatus") == 0)
+        {
+            inputAction = new PrintPlanStatus(std::stoi(action_Line[1]));
+        }
+        else if (action_Line[0].compare("changePolicy") == 0)
+        {
+            inputAction = new ChangePlanPolicy(std::stoi(action_Line[1]), action_Line[2]);
+        }
+        else if (action_Line[0].compare("log") == 0)
+        {
+            inputAction = new PrintActionsLog();
+        }
+        else if (action_Line[0].compare("close") == 0)
+        {
+            inputAction = new Close();
+        }
+        else if (action_Line[0].compare("backup") == 0)
+        {
+            inputAction = new BackupSimulation();
+        }
+        else if (action_Line[0].compare("restore") == 0)
+        {
+            inputAction = new RestoreSimulation();
+        }
+        else
+        {
+            std::cout << "Invalid Syntex" << std::endl;
+        }
+        if (inputAction != nullptr)
+        {
+            actionsLog.push_back(inputAction);
+            inputAction->act(*this);
+        }
     }
 }
-
-
 
 void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy)
 {
@@ -80,7 +135,8 @@ void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectio
     planCounter++;
 }
 
-void Simulation::addAction(BaseAction *action) {
+void Simulation::addAction(BaseAction *action)
+{
     actionsLog.push_back(action);
 }
 
@@ -96,7 +152,7 @@ bool Simulation::addSettlement(Settlement *settlement)
 
 bool Simulation::addFacility(FacilityType facility)
 {
-    for (const FacilityType& f : facilitiesOptions)
+    for (const FacilityType &f : facilitiesOptions)
     {
         if (f.getName().compare(facility.getName()) == 0)
             return false;
@@ -115,7 +171,7 @@ bool Simulation::isSettlementExists(const string &settlementName)
     return false;
 }
 
-const vector<BaseAction*> Simulation::getActionsLog() const
+const vector<BaseAction *> Simulation::getActionsLog() const
 {
     return actionsLog;
 }
@@ -125,10 +181,9 @@ const vector<Plan> Simulation::getPlans() const
     return plans;
 }
 
-
 bool Simulation::isPlanExists(int planID)
 {
-    for (const Plan& p : plans)
+    for (const Plan &p : plans)
     {
         if (p.getID() == planID)
             return true;
@@ -148,9 +203,9 @@ Settlement &Simulation::getSettlement(const string &settlementName)
     throw std::runtime_error("Settlement with Name " + settlementName + " not found.");
 }
 
-Plan& Simulation::getPlan(const int planID)
+Plan &Simulation::getPlan(const int planID)
 {
-    for (Plan& p : plans)
+    for (Plan &p : plans)
     {
         if (p.getID() == planID)
         {
@@ -162,7 +217,7 @@ Plan& Simulation::getPlan(const int planID)
 
 void Simulation::step()
 {
-    for (Plan& p : plans)
+    for (Plan &p : plans)
     {
         p.step();
     }
@@ -174,27 +229,118 @@ void Simulation::open()
 void Simulation::close()
 {
     isRunning = false;
-    // complete
 }
 
-Simulation::Simulation(const Simulation &other): isRunning(other.isRunning), planCounter(other.planCounter),
-actionsLog(vector<BaseAction*>()), plans(vector<Plan>()), settlements(vector<Settlement*>()), facilitiesOptions(vector<FacilityType>())
+Simulation::Simulation(const Simulation &other) : isRunning(other.isRunning), planCounter(other.planCounter),
+                                                  actionsLog(vector<BaseAction *>()), plans(vector<Plan>()), settlements(vector<Settlement *>()), facilitiesOptions(vector<FacilityType>())
 {
     // Coopying Acions
-    for (int i = 0; i < other.actionsLog.size(); i++) {
+    for (int i = 0; i < other.actionsLog.size(); i++)
+    {
         actionsLog.push_back(other.actionsLog[i]);
     }
     // Coopying Plans
-    for (int i = 0; i < other.plans.size(); i++) {
+    for (int i = 0; i < other.plans.size(); i++)
+    {
         plans.push_back(other.plans[i]);
     }
     // Coopying Settlements
-    for (int i = 0; i < other.settlements.size(); i++) {
+    for (int i = 0; i < other.settlements.size(); i++)
+    {
         settlements.push_back(other.settlements[i]);
     }
-    // Coopying Facilities 
-    for (int i = 0; i < other.facilitiesOptions.size(); i++) {
+    // Coopying Facilities
+    for (int i = 0; i < other.facilitiesOptions.size(); i++)
+    {
         facilitiesOptions.push_back(other.facilitiesOptions[i]);
     }
 }
 
+Simulation::~Simulation()
+{
+    for (BaseAction *ba : actionsLog)
+    {
+        delete ba;
+    }
+    for (Settlement *s : settlements)
+    {
+        delete s;
+    }
+}
+Simulation::Simulation(Simulation &&other) : isRunning(other.isRunning), planCounter(other.planCounter), actionsLog(std::move(other.actionsLog)),
+                                             plans(std::move(other.plans)), settlements(std::move(other.settlements)), facilitiesOptions(std::move(other.facilitiesOptions)) {}
+Simulation &Simulation::operator=(const Simulation &other)
+{
+    if (&other != this)
+    {
+        isRunning = other.isRunning;
+        planCounter = other.planCounter;
+        for (BaseAction *ba : actionsLog)
+        {
+            delete ba;
+        }
+        actionsLog.clear();
+        for (BaseAction *ba : other.actionsLog)
+        {
+            actionsLog.push_back(ba->clone());
+        }
+        for (Settlement *s : settlements)
+        {
+            delete s;
+        }
+        settlements.clear();
+        for (Settlement *s : other.settlements)
+        {
+            settlements.push_back(new Settlement(s->getName(), s->getType()));
+        }
+        plans = vector<Plan>();
+        facilitiesOptions = vector<FacilityType>();
+        for (Plan p : other.plans)
+        {
+            plans.push_back(Plan(p));
+        }
+        
+        for (FacilityType f : other.facilitiesOptions)
+        {
+            facilitiesOptions.push_back(FacilityType(f));
+        }
+    }
+    return *this;
+}
+Simulation &Simulation::operator=(const Simulation &&other)
+{
+    if (&other != this)
+    {
+        isRunning = other.isRunning;
+        planCounter = other.planCounter;
+        for (BaseAction *ba : actionsLog)
+        {
+            delete ba;
+        }
+        actionsLog.clear();
+        for (BaseAction *ba : other.actionsLog)
+        {
+            actionsLog.push_back(ba);
+        }
+        for (BaseAction *ba : other.actionsLog)
+        {
+            ba = nullptr;
+        }
+        for (Settlement *s : settlements)
+        {
+            delete s;
+        }
+        settlements.clear();
+        for (Settlement *s : other.settlements)
+        {
+            settlements.push_back(s);
+        }
+        for (Settlement *s : other.settlements)
+        {
+            s = nullptr;
+        }
+        plans = std::move(other.plans);
+        facilitiesOptions = std::move(other.facilitiesOptions);
+    }
+    return *this;
+}

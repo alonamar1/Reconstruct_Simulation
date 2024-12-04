@@ -11,7 +11,8 @@ using namespace std;
 
 int main(int argc, char** argv){
     string configurationFile = argv[1];
-    //Simulation simul(configurationFile);
+    Simulation simul(configurationFile);
+    simul.start();
     // for (string s: config_File) {
     //     std::cout << s << std::endl;
     // }

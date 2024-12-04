@@ -6,6 +6,7 @@ const string &Settlement::getName() const
 {
     return name;
 }
+Settlement::Settlement(const Settlement &s): name(s.getName()), type(s.getType()){}
 SettlementType Settlement::getType() const
 {
     return type;
