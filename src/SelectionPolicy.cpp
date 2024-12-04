@@ -46,7 +46,7 @@ const FacilityType &BalancedSelection::selectFacility(const vector<FacilityType>
         int difLE = 0, difEE = 0, difEL = 0, nextFacility = 0;
 
         // Check which facility need to be built
-        for (int i = 0; i < facilitiesOptions.size(); i++)
+        for (std::size_t i = 0; i < facilitiesOptions.size(); i++)
         {
                 int lqs = LifeQualityScore + facilitiesOptions[i].getLifeQualityScore();
                 int ecos = EconomyScore + facilitiesOptions[i].getEconomyScore();
@@ -100,7 +100,7 @@ const FacilityType &EconomySelection::selectFacility(const vector<FacilityType> 
 {
         bool found = false;
         // Assuming there is at least one economy facility in vector
-        for (int i = lastSelectedIndex; !found; i++)
+        for (std::size_t i = lastSelectedIndex + 1; !found; i++)
         {
                 if (facilitiesOptions[i].getCategory() == FacilityCategory::ECONOMY)
                 {
@@ -133,7 +133,7 @@ const FacilityType &SustainabilitySelection::selectFacility(const vector<Facilit
 {
         bool found = false;
         // Assuming there is at least one environment facility in vector
-        for (int i = lastSelectedIndex; !found; i++)
+        for (std::size_t i = lastSelectedIndex + 1; !found; i++)
         {
                 if (facilitiesOptions[i].getCategory() == FacilityCategory::ENVIRONMENT)
                 {

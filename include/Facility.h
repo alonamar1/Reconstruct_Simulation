@@ -26,7 +26,8 @@ class FacilityType {
         int getEconomyScore() const;
         FacilityCategory getCategory() const;
         static FacilityStatus StringToFacilityStatus (const string& st); 
-        static FacilityCategory StringToFacilityCategory (const string& st); 
+        static FacilityCategory StringToFacilityCategory (const string& st);
+        ~FacilityType() = default;
     
 
     protected:
@@ -51,6 +52,7 @@ class Facility: public FacilityType {
         const FacilityStatus& getStatus() const;
         const string toString() const;
         const string getStringStatus() const;
+        ~Facility() = default;
 
     private:
         const string settlementName;

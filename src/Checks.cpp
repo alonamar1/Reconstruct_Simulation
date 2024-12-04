@@ -8,11 +8,11 @@
 #include <fstream>
 
 using namespace std;
-
+/*
 int main(int argc, char** argv){
     string configurationFile = argv[1];
     Simulation simul(configurationFile);
-    simul.start();
+    //simul.start();
     // for (string s: config_File) {
     //     std::cout << s << std::endl;
     // }
@@ -38,7 +38,7 @@ int main(int argc, char** argv){
     //cout << pol->selectFacility(v).getName() << endl;
     //cout << pol->toString() << endl;
     //cout << std::to_string(hospital->getCost()) << endl; 
-    const int id = 1;
+    const int id = 0;
 
     Plan p1 = Plan(id, *s1, pol, v);
     //cout << p1.toString() << endl;
@@ -52,10 +52,15 @@ int main(int argc, char** argv){
     p1.step();
     p1.step();
     p1.step();
+    p1.step();
+    p1.step();
+    p1.step();
+    p1.step();
     cout << p1.toString() << endl;
     Plan *p2 = new Plan(p1);
     p2->setSelectionPolicy(nvePol);
     cout << p2->toString() << endl;
+    cout << p1.toString() << endl;
 
     delete p2;
     delete s1;
@@ -68,4 +73,4 @@ int main(int argc, char** argv){
     delete ecoPol;
 
     return 0;
-}
+}*/

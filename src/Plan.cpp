@@ -22,6 +22,7 @@ void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy)
 {
     delete Plan::selectionPolicy; //  האם צריך למחוק את כל מה שיש פה ??? או למחוק את זה בchagnepolicy
     Plan::selectionPolicy = selectionPolicy;
+    // לבדוק האם צריך לעשות status
 }
 
 void Plan::step()
@@ -30,7 +31,8 @@ void Plan::step()
     while (status == PlanStatus::AVALIABLE)
     {
         FacilityType selectedFacilityType = selectionPolicy->selectFacility(facilityOptions);
-        underConstruction.push_back(new Facility(selectedFacilityType, settlement.getName()));
+        Facility *fac = new Facility(selectedFacilityType, settlement.getName());
+        underConstruction.push_back(fac);
         if (underConstruction.size() >= limit(settlement))
         {
             status = PlanStatus::BUSY;
@@ -38,7 +40,7 @@ void Plan::step()
     }
     vector<int> forDelete;
     // Do step on the facilities under construction
-    for (int i = 0; i < underConstruction.size(); i++)
+    for (std::size_t i = 0; i < underConstruction.size(); i++)
     {
         underConstruction[i]->step();
         if (underConstruction[i]->getStatus() == FacilityStatus::OPERATIONAL)
@@ -51,6 +53,9 @@ void Plan::step()
     for (int f : forDelete)
     {
         underConstruction.erase(underConstruction.begin() + f);
+        for (std::size_t i = f; i<forDelete.size(); i++){
+            forDelete[i]--;
+        }
     }
     if (forDelete.size() > 0)
     {
@@ -59,7 +64,7 @@ void Plan::step()
 }
 
 // return the limit to construction facility
-int Plan::limit(const Settlement &settle)
+std::size_t Plan::limit(const Settlement &settle)
 {
     if (settle.getType() == SettlementType::VILLAGE)
     {
@@ -93,7 +98,7 @@ void Plan::addFacility(Facility *facility)
     facilities.push_back(facility);
     life_quality_score += facility->getLifeQualityScore();
     economy_score += facility->getEconomyScore();
-    environment_score += facility->getEconomyScore();
+    environment_score += facility->getEnvironmentScore();
 }
 const SelectionPolicy *Plan::getSelectionPolicy() const
 {
@@ -138,11 +143,13 @@ Plan::~Plan()
     {
         delete facility;
     }
+    underConstruction.clear();
     // Clean up dynamically allocated memory for opersions facilities
     for (Facility *facility : facilities)
     {
         delete facility;
     }
+    facilities.clear();
     // Delete the Selected Policy object
     delete selectionPolicy;
 }

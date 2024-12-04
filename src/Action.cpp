@@ -1,9 +1,5 @@
-
 #include "Action.h"
 #include <iostream>
-#include "main.cpp"
-
-extern Simulation* backup;
 
 //--------------BaseAction---------------------//
 BaseAction::BaseAction() : errorMsg(""), status(ActionStatus::ERROR) {}
@@ -70,7 +66,10 @@ void AddPlan::act(Simulation &simulation)
         complete();
     }
     else
+    {
         error("cannot create this plan");
+        std::cout << getErrorMsg() << std::endl;
+    }
 }
 
 const string AddPlan::toString() const
@@ -91,6 +90,7 @@ void AddSettlement::act(Simulation &simulation)
     if (!result)
     {
         error("settlement already exist");
+        std::cout << getErrorMsg() << std::endl;
     }
     else
         complete();
@@ -116,6 +116,7 @@ void AddFacility::act(Simulation &simulation)
     if (!result)
     {
         error("facility already exist");
+        std::cout << getErrorMsg() << std::endl;
     }
     else
         complete();
@@ -156,6 +157,7 @@ void PrintPlanStatus::act(Simulation &simulation)
     else
     {
         error("plan doesn't exist");
+        std::cout << getErrorMsg() << std::endl;
     }
 }
 
@@ -184,12 +186,14 @@ void ChangePlanPolicy::act(Simulation &simulation)
             envScore += f->getEnvironmentScore();
             lqScore += f->getLifeQualityScore();
         }
-        currPlan.setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore));
+        currPlan.setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore)); 
+
         complete();
     }
     else
     {
         error("Cannot change selection policy");
+        std::cout << getErrorMsg() << std::endl;
     }
 }
 ChangePlanPolicy *ChangePlanPolicy::clone() const
@@ -205,9 +209,9 @@ const string ChangePlanPolicy::toString() const
 PrintActionsLog::PrintActionsLog() : BaseAction() {}
 void PrintActionsLog::act(Simulation &simulation)
 {
-    for (BaseAction *a : simulation.getActionsLog())
+    for (std::size_t i = 0; i < simulation.getActionsLog().size()-1 ; i++)
     {
-        std::cout << a->toString() << "\n"
+       std::cout << simulation.getActionsLog()[i]->toString() << "\n"
                   << std::endl;
     }
     complete();
@@ -225,7 +229,7 @@ const string PrintActionsLog::toString() const
 Close::Close() : BaseAction() {}
 void Close::act(Simulation &simulation)
 {
-    for (const Plan& p : simulation.getPlans())
+    for (const Plan &p : simulation.getPlans())
     {
         std::cout << p.toString() << std::endl;
     }
@@ -245,7 +249,8 @@ const string Close::toString() const
 BackupSimulation::BackupSimulation() : BaseAction() {}
 void BackupSimulation::act(Simulation &simulation)
 {
-    //backup;
+    backup = new Simulation(simulation);
+    complete();
 }
 BackupSimulation *BackupSimulation::clone() const
 {
@@ -259,8 +264,17 @@ const string BackupSimulation::toString() const
 //--------------RestoresSimulation---------------------//
 RestoreSimulation::RestoreSimulation() : BaseAction() {}
 void RestoreSimulation::act(Simulation &simulation)
-{
-    //backup = new Simulation(simulation);
+{ /*
+    if (backup != nullptr)
+    {
+        simulation = *backup;
+        complete();
+    }
+    else 
+    {
+        error("No backup available");
+        std::cout << getErrorMsg() << std::endl;
+    } */
 }
 RestoreSimulation *RestoreSimulation::clone() const
 {

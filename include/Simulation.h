@@ -33,8 +33,8 @@ public:
     static SelectionPolicy *create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore);
     // Rule of 5:
     Simulation(const Simulation &other);
-    Simulation &operator=(const Simulation &other);
-    Simulation &operator=(const Simulation &&other);
+    //Simulation &operator=(const Simulation &other);
+    //Simulation &operator=(const Simulation &&other);
     ~Simulation();
     Simulation(Simulation &&other); 
 

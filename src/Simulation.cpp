@@ -13,8 +13,8 @@ Settlement *Simulation::find_Settlemnt(vector<Settlement *> settlement, const st
     {
         if (s->getName().compare(nameS) == 0)
             return s;
-        return nullptr;
     }
+    return nullptr;
 }
 
 SelectionPolicy *Simulation::create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore)
@@ -216,11 +216,11 @@ Plan &Simulation::getPlan(const int planID)
 }
 
 void Simulation::step()
-{
+{ 
     for (Plan &p : plans)
     {
         p.step();
-    }
+    } 
 }
 void Simulation::open()
 {
@@ -235,22 +235,22 @@ Simulation::Simulation(const Simulation &other) : isRunning(other.isRunning), pl
                                                   actionsLog(vector<BaseAction *>()), plans(vector<Plan>()), settlements(vector<Settlement *>()), facilitiesOptions(vector<FacilityType>())
 {
     // Coopying Acions
-    for (int i = 0; i < other.actionsLog.size(); i++)
+    for (std::size_t i = 0; i < other.actionsLog.size(); i++)
     {
         actionsLog.push_back(other.actionsLog[i]);
     }
     // Coopying Plans
-    for (int i = 0; i < other.plans.size(); i++)
+    for (std::size_t i = 0; i < other.plans.size(); i++)
     {
         plans.push_back(other.plans[i]);
     }
     // Coopying Settlements
-    for (int i = 0; i < other.settlements.size(); i++)
+    for (std::size_t i = 0; i < other.settlements.size(); i++)
     {
         settlements.push_back(other.settlements[i]);
     }
     // Coopying Facilities
-    for (int i = 0; i < other.facilitiesOptions.size(); i++)
+    for (std::size_t i = 0; i < other.facilitiesOptions.size(); i++)
     {
         facilitiesOptions.push_back(other.facilitiesOptions[i]);
     }
@@ -262,13 +262,16 @@ Simulation::~Simulation()
     {
         delete ba;
     }
+    actionsLog.clear();
     for (Settlement *s : settlements)
     {
         delete s;
     }
+    settlements.clear(); 
 }
 Simulation::Simulation(Simulation &&other) : isRunning(other.isRunning), planCounter(other.planCounter), actionsLog(std::move(other.actionsLog)),
                                              plans(std::move(other.plans)), settlements(std::move(other.settlements)), facilitiesOptions(std::move(other.facilitiesOptions)) {}
+/*
 Simulation &Simulation::operator=(const Simulation &other)
 {
     if (&other != this)
@@ -293,17 +296,8 @@ Simulation &Simulation::operator=(const Simulation &other)
         {
             settlements.push_back(new Settlement(s->getName(), s->getType()));
         }
-        plans = vector<Plan>();
-        facilitiesOptions = vector<FacilityType>();
-        for (Plan p : other.plans)
-        {
-            plans.push_back(Plan(p));
-        }
-        
-        for (FacilityType f : other.facilitiesOptions)
-        {
-            facilitiesOptions.push_back(FacilityType(f));
-        }
+        plans = other.plans;
+        facilitiesOptions = other.facilitiesOptions;
     }
     return *this;
 }
@@ -343,4 +337,4 @@ Simulation &Simulation::operator=(const Simulation &&other)
         facilitiesOptions = std::move(other.facilitiesOptions);
     }
     return *this;
-}
+} */

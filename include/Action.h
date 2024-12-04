@@ -11,6 +11,8 @@ enum class ActionStatus
     ERROR
 };
 
+extern Simulation* backup;
+
 class BaseAction
 {
 public:

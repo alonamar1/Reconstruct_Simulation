@@ -29,7 +29,7 @@ public:
     //---------funcions we've added-----------// 
         const int getID() const; // returns the plan's ID
 
-    int limit(const Settlement &settle); // return the limit to construction facility
+    std::size_t limit(const Settlement &settle); // return the limit to construction facility
     Plan &operator=(const Plan &other) = delete;
     Plan &operator=(const Plan &&other) = delete;
     ~Plan();
