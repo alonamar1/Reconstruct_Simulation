@@ -103,7 +103,7 @@ AddSettlement *AddSettlement::clone() const
 
 const string AddSettlement::toString() const
 {
-    return "settlement" + settlementName + " " + Settlement::settlementTypeToString(settlementType) + " " + BaseAction::getStringStatus();
+    return "settlement " + settlementName + " " + Settlement::settlementTypeToString(settlementType) + " " + BaseAction::getStringStatus();
     ;
 }
 
@@ -174,19 +174,19 @@ const string PrintPlanStatus::toString() const
 ChangePlanPolicy::ChangePlanPolicy(const int planId, const string &newPolicy) : BaseAction(), planId(planId), newPolicy(newPolicy) {}
 void ChangePlanPolicy::act(Simulation &simulation)
 {
-    Plan currPlan = simulation.getPlan(planId);
+    Plan *currPlan = &simulation.getPlan(planId);
     // just if there is a plan with the same name and the policy is diffrent the the prvious one
-    if (simulation.isPlanExists(planId) && currPlan.getSelectionPolicy()->getPolicyType().compare(newPolicy) != 0)
+    if (simulation.isPlanExists(planId) && currPlan->getSelectionPolicy()->getPolicyType().compare(newPolicy) != 0)
     {
-        int ecoScore = currPlan.getEconomyScore(), envScore = currPlan.getEnvironmentScore(), lqScore = currPlan.getlifeQualityScore();
+        int ecoScore = currPlan->getEconomyScore(), envScore = currPlan->getEnvironmentScore(), lqScore = currPlan->getlifeQualityScore();
         // include the scores of the underConstruction
-        for (Facility *f : currPlan.getUnderConstruction())
+        for (Facility *f : currPlan->getUnderConstruction())
         {
             ecoScore += f->getEconomyScore();
             envScore += f->getEnvironmentScore();
             lqScore += f->getLifeQualityScore();
         }
-        currPlan.setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore)); 
+        currPlan->setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore)); 
 
         complete();
     }
@@ -211,8 +211,7 @@ void PrintActionsLog::act(Simulation &simulation)
 {
     for (std::size_t i = 0; i < simulation.getActionsLog().size()-1 ; i++)
     {
-       std::cout << simulation.getActionsLog()[i]->toString() << "\n"
-                  << std::endl;
+       std::cout << simulation.getActionsLog()[i]->toString() << std::endl;
     }
     complete();
 }
@@ -264,7 +263,7 @@ const string BackupSimulation::toString() const
 //--------------RestoresSimulation---------------------//
 RestoreSimulation::RestoreSimulation() : BaseAction() {}
 void RestoreSimulation::act(Simulation &simulation)
-{ /*
+{ 
     if (backup != nullptr)
     {
         simulation = *backup;
@@ -274,7 +273,7 @@ void RestoreSimulation::act(Simulation &simulation)
     {
         error("No backup available");
         std::cout << getErrorMsg() << std::endl;
-    } */
+    } 
 }
 RestoreSimulation *RestoreSimulation::clone() const
 {

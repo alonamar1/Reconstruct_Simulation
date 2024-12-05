@@ -4,6 +4,23 @@
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) : plan_id(planId), settlement(settlement), selectionPolicy(selectionPolicy), status(PlanStatus::AVALIABLE), facilities(vector<Facility *>()),
                                                                                                                                             underConstruction(vector<Facility *>()), facilityOptions(facilityOptions),
                                                                                                                                             life_quality_score(0), economy_score(0), environment_score(0) {}
+// get another plan and a new settlement
+Plan::Plan(const Plan &other, const Settlement &newS) : plan_id(other.plan_id), settlement(newS), selectionPolicy(other.selectionPolicy->clone()), status(other.status),
+      facilities(vector<Facility *>()), underConstruction(vector<Facility *>()), facilityOptions(other.facilityOptions),
+      life_quality_score(other.life_quality_score), economy_score(other.economy_score), environment_score(other.environment_score)
+{
+    // Deep copy the 'underConstruction' vector
+    for (Facility *f : other.underConstruction)
+    {
+        underConstruction.push_back(new Facility(*f)); // Create a copy of each Facility
+    }
+
+    // Deep copy the 'facilities' vector
+    for (Facility *f : other.facilities)
+    {
+        facilities.push_back(new Facility(*f)); // Create a copy of each Facility
+    }
+}
 
 const int Plan::getlifeQualityScore() const
 {
@@ -20,9 +37,9 @@ const int Plan::getEnvironmentScore() const
 }
 void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy)
 {
-    delete Plan::selectionPolicy; //  האם צריך למחוק את כל מה שיש פה ??? או למחוק את זה בchagnepolicy
+    delete Plan::selectionPolicy;
     Plan::selectionPolicy = selectionPolicy;
-    // לבדוק האם צריך לעשות status
+    selectionPolicy = nullptr;
 }
 
 void Plan::step()
@@ -53,7 +70,8 @@ void Plan::step()
     for (int f : forDelete)
     {
         underConstruction.erase(underConstruction.begin() + f);
-        for (std::size_t i = f; i<forDelete.size(); i++){
+        for (std::size_t i = f; i < forDelete.size(); i++)
+        {
             forDelete[i]--;
         }
     }

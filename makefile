@@ -1,7 +1,7 @@
 # Please implement your Makefile rules and targets below.
 # Customize this file to define how to build your project.
 # All Targets
-all: clean link run checkMemo
+all: clean link checkMemo
 
 link: compile
 	@echo "Linking object files"
