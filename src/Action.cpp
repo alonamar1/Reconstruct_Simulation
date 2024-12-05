@@ -50,7 +50,7 @@ const string SimulateStep::toString() const
 }
 SimulateStep *SimulateStep::clone() const
 {
-    return new SimulateStep(numOfSteps);
+    return new SimulateStep(*this);
 }
 
 //--------------AddPlan---------------------//
@@ -79,7 +79,7 @@ const string AddPlan::toString() const
 
 AddPlan *AddPlan::clone() const
 {
-    return new AddPlan(settlementName, selectionPolicy);
+    return new AddPlan(*this);
 }
 
 //--------------AddSettlement---------------------//
@@ -98,7 +98,7 @@ void AddSettlement::act(Simulation &simulation)
 
 AddSettlement *AddSettlement::clone() const
 {
-    return new AddSettlement(settlementName, settlementType);
+    return new AddSettlement(*this);
 }
 
 const string AddSettlement::toString() const
@@ -123,7 +123,7 @@ void AddFacility::act(Simulation &simulation)
 }
 AddFacility *AddFacility::clone() const
 {
-    return new AddFacility(facilityName, facilityCategory, price, lifeQualityScore, economyScore, environmentScore);
+    return new AddFacility(*this);
 }
 
 const string AddFacility::toString() const
@@ -163,7 +163,7 @@ void PrintPlanStatus::act(Simulation &simulation)
 
 PrintPlanStatus *PrintPlanStatus::clone() const
 {
-    return new PrintPlanStatus(planId);
+    return new PrintPlanStatus(*this);
 }
 
 const string PrintPlanStatus::toString() const
@@ -198,7 +198,7 @@ void ChangePlanPolicy::act(Simulation &simulation)
 }
 ChangePlanPolicy *ChangePlanPolicy::clone() const
 {
-    return new ChangePlanPolicy(planId, newPolicy);
+    return new ChangePlanPolicy(*this);
 }
 const string ChangePlanPolicy::toString() const
 {
@@ -217,7 +217,7 @@ void PrintActionsLog::act(Simulation &simulation)
 }
 PrintActionsLog *PrintActionsLog::clone() const
 {
-    return new PrintActionsLog();
+    return new PrintActionsLog(*this);
 }
 const string PrintActionsLog::toString() const
 {
@@ -237,7 +237,7 @@ void Close::act(Simulation &simulation)
 }
 Close *Close::clone() const
 {
-    return new Close();
+    return new Close(*this);
 }
 const string Close::toString() const
 {
@@ -253,7 +253,7 @@ void BackupSimulation::act(Simulation &simulation)
 }
 BackupSimulation *BackupSimulation::clone() const
 {
-    return new BackupSimulation();
+    return new BackupSimulation(*this);
 }
 const string BackupSimulation::toString() const
 {
@@ -277,7 +277,7 @@ void RestoreSimulation::act(Simulation &simulation)
 }
 RestoreSimulation *RestoreSimulation::clone() const
 {
-    return new RestoreSimulation();
+    return new RestoreSimulation(*this);
 }
 const string RestoreSimulation::toString() const
 {

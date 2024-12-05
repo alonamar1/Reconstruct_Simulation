@@ -33,7 +33,7 @@ const string NaiveSelection::toString() const
 }
 NaiveSelection *NaiveSelection::clone() const
 {
-        return new NaiveSelection(lastSelectedIndex);
+        return new NaiveSelection(*this);
 }
 
 //--------------BalancedSelection---------------------//
@@ -82,7 +82,7 @@ const string BalancedSelection::toString() const
 }
 BalancedSelection *BalancedSelection::clone() const
 {
-        return new BalancedSelection(LifeQualityScore, EconomyScore, EnvironmentScore);
+        return new BalancedSelection(*this);
 }
 
 // The function add the scores to the scores fields in a given balaced policy
@@ -117,7 +117,7 @@ const FacilityType &EconomySelection::selectFacility(const vector<FacilityType> 
 }
 EconomySelection *EconomySelection::clone() const
 {
-        return new EconomySelection(lastSelectedIndex);
+        return new EconomySelection(*this);
 }
 
 const string EconomySelection::toString() const
@@ -151,7 +151,7 @@ const FacilityType &SustainabilitySelection::selectFacility(const vector<Facilit
 
 SustainabilitySelection *SustainabilitySelection::clone() const
 {
-        return new SustainabilitySelection(lastSelectedIndex);
+        return new SustainabilitySelection(*this);
 }
 
 const string SustainabilitySelection::toString() const

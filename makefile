@@ -26,4 +26,4 @@ clean:
 	@echo "Cleaning bin directory"
 	rm -f bin/*
 checkMemo:
-	valgrind --leak-check=full --show-reachable=yes ./bin/main ./config_file.txt
+	valgrind --leak-check=full --show-reachable=yes --track-origins=yes ./bin/main ./config_file.txt

@@ -73,57 +73,60 @@ void Simulation::start()
         string user_input;
         std::getline(std::cin, user_input);
         vector<string> action_Line = Auxiliary::parseArguments(user_input);
-        BaseAction *inputAction;
-        if (action_Line[0].compare("step") == 0 && action_Line.size() == 2)
+        if (action_Line.size() > 0) 
         {
-            inputAction = new SimulateStep(std::stoi(action_Line[1]));
-        }
-        else if (action_Line[0].compare("plan") == 0 && action_Line.size() == 3)
-        {
-            inputAction = new AddPlan(action_Line[1], action_Line[2]);
-        }
-        else if (action_Line[0].compare("settlement") == 0 && action_Line.size() == 3)
-        {
-            inputAction = new AddSettlement(action_Line[1], Settlement::StringToSettlementType(action_Line[2]));
-        }
-        else if (action_Line[0].compare("facility") == 0 && action_Line.size() == 7)
-        {
-            inputAction = new AddFacility(action_Line[1],
-                                          FacilityType::StringToFacilityCategory(action_Line[2]), std::stoi(action_Line[3]), std::stoi(action_Line[4]),
-                                          std::stoi(action_Line[5]), std::stoi(action_Line[6]));
-        }
-        else if (action_Line[0].compare("planStatus") == 0 && action_Line.size() == 2)
-        {
-            inputAction = new PrintPlanStatus(std::stoi(action_Line[1]));
-        }
-        else if (action_Line[0].compare("changePolicy") == 0 && action_Line.size() == 3)
-        {
-            inputAction = new ChangePlanPolicy(std::stoi(action_Line[1]), action_Line[2]);
-        }
-        else if (action_Line[0].compare("log") == 0)
-        {
-            inputAction = new PrintActionsLog();
-        }
-        else if (action_Line[0].compare("close") == 0)
-        {
-            inputAction = new Close();
-        }
-        else if (action_Line[0].compare("backup") == 0)
-        {
-            inputAction = new BackupSimulation();
-        }
-        else if (action_Line[0].compare("restore") == 0)
-        {
-            inputAction = new RestoreSimulation();
-        }
-        else
-        {
-            std::cout << "Invalid Syntex" << std::endl;
-        }
-        if (inputAction != nullptr)
-        {
-            actionsLog.push_back(inputAction);
-            inputAction->act(*this);
+            BaseAction *inputAction;
+            if (action_Line[0].compare("step") == 0 && action_Line.size() == 2)
+            {
+                inputAction = new SimulateStep(std::stoi(action_Line[1]));
+            }
+            else if (action_Line[0].compare("plan") == 0 && action_Line.size() == 3)
+            {
+                inputAction = new AddPlan(action_Line[1], action_Line[2]);
+            }
+            else if (action_Line[0].compare("settlement") == 0 && action_Line.size() == 3)
+            {
+                inputAction = new AddSettlement(action_Line[1], Settlement::StringToSettlementType(action_Line[2]));
+            }
+            else if (action_Line[0].compare("facility") == 0 && action_Line.size() == 7)
+            {
+                inputAction = new AddFacility(action_Line[1],
+                                              FacilityType::StringToFacilityCategory(action_Line[2]), std::stoi(action_Line[3]), std::stoi(action_Line[4]),
+                                              std::stoi(action_Line[5]), std::stoi(action_Line[6]));
+            }
+            else if (action_Line[0].compare("planStatus") == 0 && action_Line.size() == 2)
+            {
+                inputAction = new PrintPlanStatus(std::stoi(action_Line[1]));
+            }
+            else if (action_Line[0].compare("changePolicy") == 0 && action_Line.size() == 3)
+            {
+                inputAction = new ChangePlanPolicy(std::stoi(action_Line[1]), action_Line[2]);
+            }
+            else if (action_Line[0].compare("log") == 0)
+            {
+                inputAction = new PrintActionsLog();
+            }
+            else if (action_Line[0].compare("close") == 0)
+            {
+                inputAction = new Close();
+            }
+            else if (action_Line[0].compare("backup") == 0)
+            {
+                inputAction = new BackupSimulation();
+            }
+            else if (action_Line[0].compare("restore") == 0)
+            {
+                inputAction = new RestoreSimulation();
+            }
+            else
+            {
+                std::cout << "Invalid Syntex" << std::endl;
+            }
+            if (inputAction != nullptr)
+            {
+                actionsLog.push_back(inputAction);
+                inputAction->act(*this);
+            }
         }
     }
 }
@@ -244,16 +247,17 @@ Simulation::Simulation(const Simulation &other) : isRunning(other.isRunning), pl
     {
         settlements.push_back(new Settlement(*other.settlements[i]));
     }
-    // Coopying Plans
-    for (std::size_t i = 0; i < other.plans.size(); i++)
-    {
-
-        plans.push_back(Plan(other.plans[i]));
-    }
     // Coopying Facilities
     for (std::size_t i = 0; i < other.facilitiesOptions.size(); i++)
     {
         facilitiesOptions.push_back(other.facilitiesOptions[i]);
+    }
+    // Coopying Plans
+    for (std::size_t i = 0; i < other.plans.size(); i++)
+    {
+        Settlement *s = Simulation::find_Settlemnt(settlements, other.plans[i].getSettlementName());
+        Plan p = Plan(other.plans[i], *s);
+        plans.push_back(p);
     }
 }
 
@@ -275,6 +279,8 @@ Simulation::Simulation(Simulation &&other) : isRunning(other.isRunning), planCou
 
 Simulation &Simulation::operator=(const Simulation &other)
 {
+    isRunning = other.isRunning;
+    planCounter = other.planCounter;
     if (&other != this)
     {
         // delete corrent files
@@ -288,6 +294,8 @@ Simulation &Simulation::operator=(const Simulation &other)
             delete s;
         }
         settlements.clear();
+        plans.clear();
+        facilitiesOptions.clear();
 
         // Put things inside | Deep copy
         for (BaseAction *ba : other.actionsLog)
@@ -299,20 +307,22 @@ Simulation &Simulation::operator=(const Simulation &other)
             settlements.push_back(new Settlement(*s));
         }
 
-        for (std::size_t i = 0; i < other.plans.size(); i++)
-        {
-
-        plans.push_back(Plan(other.plans[i]));
-        }
         for (std::size_t i = 0; i < other.facilitiesOptions.size(); i++)
         {
-        facilitiesOptions.push_back(other.facilitiesOptions[i]);
+            facilitiesOptions.push_back(other.facilitiesOptions[i]);
         }
 
+        for (std::size_t i = 0; i < other.plans.size(); i++)
+        {
+            Settlement *s = Simulation::find_Settlemnt(settlements, other.plans[i].getSettlementName());
+            Plan p = Plan(other.plans[i], *s);
+            plans.push_back(p);
+        }
     }
     return *this;
 }
 
+// need to try this!
 /*Simulation &Simulation::operator=(const Simulation &&other)
 {
     if (&other != this)

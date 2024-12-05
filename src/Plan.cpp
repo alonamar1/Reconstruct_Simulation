@@ -5,7 +5,7 @@ Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *sele
                                                                                                                                             underConstruction(vector<Facility *>()), facilityOptions(facilityOptions),
                                                                                                                                             life_quality_score(0), economy_score(0), environment_score(0) {}
 // get another plan and a new settlement
-Plan::Plan(const Plan &other, const Settlement &newS) : plan_id(other.plan_id), settlement(newS), selectionPolicy(other.selectionPolicy->clone()), status(other.status),
+Plan::Plan(const Plan &other, const Settlement &newS) : plan_id(other.plan_id), settlement(newS),selectionPolicy(other.selectionPolicy->clone()), status(other.status),
       facilities(vector<Facility *>()), underConstruction(vector<Facility *>()), facilityOptions(other.facilityOptions),
       life_quality_score(other.life_quality_score), economy_score(other.economy_score), environment_score(other.environment_score)
 {
@@ -104,6 +104,10 @@ void Plan::printStatus()
         std::cout << "AVAILABLE" << std::endl;
     if (status == PlanStatus::BUSY)
         std::cout << "BUSY" << std::endl;
+}
+
+const string Plan::getSettlementName() const {
+    return settlement.getName();
 }
 
 const vector<Facility *> &Plan::getFacilities() const

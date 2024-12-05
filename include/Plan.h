@@ -15,7 +15,7 @@ class Plan
 {
 public:
     Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions);
-    Plan(const Plan& other, const Settlement& newS);
+    Plan(const Plan &other, const Settlement &newS);
     const int getlifeQualityScore() const;
     const int getEconomyScore() const;
     const int getEnvironmentScore() const;
@@ -26,18 +26,18 @@ public:
     void addFacility(Facility *facility);
     const string toString() const;
     const std::string getStatus();
-    
-    //---------funcions we've added-----------// 
-        const int getID() const; // returns the plan's ID
 
+    //---------funcions we've added-----------//
+    const int getID() const; // returns the plan's ID
+    const string getSettlementName() const;
     std::size_t limit(const Settlement &settle); // return the limit to construction facility
     Plan &operator=(const Plan &other) = delete;
     Plan &operator=(const Plan &&other) = delete;
     ~Plan();
     Plan(const Plan &other);
     Plan(Plan &&other); // move func
-    const SelectionPolicy* getSelectionPolicy() const;
-    const vector<Facility*> getUnderConstruction() const;
+    const SelectionPolicy *getSelectionPolicy() const;
+    const vector<Facility *> getUnderConstruction() const;
 
 private:
     int plan_id;
