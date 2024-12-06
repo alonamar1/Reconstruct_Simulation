@@ -10,21 +10,27 @@ Simulation::Simulation(const string &configFilePath) : isRunning(false), planCou
                                                        actionsLog(vector<BaseAction *>()), plans(vector<Plan>()), settlements(vector<Settlement *>()),
                                                        facilitiesOptions(vector<FacilityType>())
 {
+    // Open the configuration file for reading.
     std::ifstream File(configFilePath);
     string line;
+
+    // Read the file line by line.
     while (getline(File, line))
     {
         vector<string> config_Line = Auxiliary::parseArguments(line);
+        // If the first element is "settlement", create a new Settlement and add it to the simulation.
         if (config_Line[0].compare("settlement") == 0)
         {
             addSettlement(new Settlement(config_Line[1], Settlement::StringToSettlementType(config_Line[2])));
         }
+         // If the first element is "facility", create a new FacilityType and add it to the simulation.
         if (config_Line[0].compare("facility") == 0)
         {
             addFacility(FacilityType(config_Line[1],
                                      FacilityType::StringToFacilityCategory(config_Line[2]), std::stoi(config_Line[3]), std::stoi(config_Line[4]),
                                      std::stoi(config_Line[5]), std::stoi(config_Line[6])));
         }
+        // If the first element is "plan", create a new Plan and add it to the simulation.
         if (config_Line[0].compare("plan") == 0)
         {
             addPlan(*find_Settlemnt(settlements, config_Line[1]), create_Policy(config_Line[2], 0, 0, 0));
@@ -90,6 +96,7 @@ void Simulation::start()
             {
                 std::cout << "INVALID ACTION" << std::endl;
             }
+            // if it's vaild action excute it
             if (inputAction != nullptr)
             {
                 inputAction->act(*this);
