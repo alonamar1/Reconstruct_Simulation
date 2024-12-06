@@ -6,38 +6,6 @@
 #include <fstream>
 #include <iostream>
 
-// לבדוק האם אפשר למחוק את הפונקציה הזו!
-Settlement *Simulation::find_Settlemnt(vector<Settlement *> settlement, const string &nameS)
-{
-    for (Settlement *s : settlement)
-    {
-        if (s->getName().compare(nameS) == 0)
-            return s;
-    }
-    return nullptr;
-}
-
-SelectionPolicy *Simulation::create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore)
-{
-    if (typeP.compare("eco") == 0)
-    {
-        return new EconomySelection();
-    }
-    else if (typeP.compare("bal") == 0)
-    {
-        return new BalancedSelection(lqScore, ecoScore, envScore);
-    }
-    else if (typeP.compare("env") == 0)
-    {
-        return new SustainabilitySelection();
-    }
-    else if (typeP.compare("nve") == 0)
-    {
-        return new NaiveSelection();
-    }
-    return nullptr;
-}
-
 Simulation::Simulation(const string &configFilePath) : isRunning(false), planCounter(0),
                                                        actionsLog(vector<BaseAction *>()), plans(vector<Plan>()), settlements(vector<Settlement *>()),
                                                        facilitiesOptions(vector<FacilityType>())
@@ -174,25 +142,7 @@ bool Simulation::isSettlementExists(const string &settlementName)
     return false;
 }
 
-const vector<BaseAction *> Simulation::getActionsLog() const
-{
-    return actionsLog;
-}
 
-const vector<Plan> Simulation::getPlans() const
-{
-    return plans;
-}
-
-bool Simulation::isPlanExists(int planID)
-{
-    for (const Plan &p : plans)
-    {
-        if (p.getID() == planID)
-            return true;
-    }
-    return false;
-}
 
 Settlement &Simulation::getSettlement(const string &settlementName)
 {
@@ -203,7 +153,7 @@ Settlement &Simulation::getSettlement(const string &settlementName)
             return *s;
         }
     }
-    throw std::runtime_error("Settlement with Name " + settlementName + " not found.");
+    return *settlements[0];//to evoid compilation error, but actually the function can't get there since we always use "isSettlementExist" before calling the function.
 }
 
 Plan &Simulation::getPlan(const int planID)
@@ -215,7 +165,7 @@ Plan &Simulation::getPlan(const int planID)
             return p;
         }
     }
-    throw std::runtime_error("Plan with ID " + std::to_string(planID) + " not found.");
+    return plans[0]; //to evoid compilation error, but actually the function can't get there since we always use "isPlanExist" before calling the function.
 }
 
 void Simulation::step()
@@ -225,13 +175,15 @@ void Simulation::step()
         p.step();
     }
 }
-void Simulation::open()
-{
-    isRunning = true;
-}
+
 void Simulation::close()
 {
     isRunning = false;
+}
+
+void Simulation::open()
+{
+    isRunning = true;
 }
 
 Simulation::Simulation(const Simulation &other) : isRunning(other.isRunning), planCounter(other.planCounter),
@@ -385,4 +337,54 @@ Simulation &Simulation::operator=(Simulation &&other)
         other.facilitiesOptions.clear();
     }
     return *this;
+}
+
+Settlement *Simulation::find_Settlemnt(vector<Settlement *> settlement, const string &nameS)
+{
+    for (Settlement *s : settlement)
+    {
+        if (s->getName().compare(nameS) == 0)
+            return s;
+    }
+    return nullptr;
+}
+
+SelectionPolicy *Simulation::create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore)
+{
+    if (typeP.compare("eco") == 0)
+    {
+        return new EconomySelection();
+    }
+    else if (typeP.compare("bal") == 0)
+    {
+        return new BalancedSelection(lqScore, ecoScore, envScore);
+    }
+    else if (typeP.compare("env") == 0)
+    {
+        return new SustainabilitySelection();
+    }
+    else if (typeP.compare("nve") == 0)
+    {
+        return new NaiveSelection();
+    }
+    return nullptr;
+}
+const vector<BaseAction *> Simulation::getActionsLog() const
+{
+    return actionsLog;
+}
+
+const vector<Plan> Simulation::getPlans() const
+{
+    return plans;
+}
+
+bool Simulation::isPlanExists(int planID)
+{
+    for (const Plan &p : plans)
+    {
+        if (p.getID() == planID)
+            return true;
+    }
+    return false;
 }

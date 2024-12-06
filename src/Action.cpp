@@ -21,6 +21,7 @@ void BaseAction::complete()
 {
     status = ActionStatus::COMPLETED;
 }
+
 void BaseAction::error(string errorMsg)
 {
     status = ActionStatus::ERROR;
@@ -174,26 +175,31 @@ const string PrintPlanStatus::toString() const
 ChangePlanPolicy::ChangePlanPolicy(const int planId, const string &newPolicy) : BaseAction(), planId(planId), newPolicy(newPolicy) {}
 void ChangePlanPolicy::act(Simulation &simulation)
 {
-    Plan *currPlan = &simulation.getPlan(planId);
-    string prevPol = currPlan->getSelectionPolicy()->getPolicyType();
+    bool hasChange = false;
     // just if there is a plan with the same name and the policy is diffrent the the prvious one
-    if (simulation.isPlanExists(planId) && currPlan->getSelectionPolicy()->getPolicyType().compare(newPolicy) != 0)
+    if (simulation.isPlanExists(planId))
     {
-        int ecoScore = currPlan->getEconomyScore(), envScore = currPlan->getEnvironmentScore(), lqScore = currPlan->getlifeQualityScore();
-        // include the scores of the underConstruction
-        for (Facility *f : currPlan->getUnderConstruction())
+        Plan *currPlan = &simulation.getPlan(planId);
+        string prevPol = currPlan->getSelectionPolicy()->getPolicyType();
+        if (currPlan->getSelectionPolicy()->getPolicyType().compare(newPolicy) != 0)
         {
-            ecoScore += f->getEconomyScore();
-            envScore += f->getEnvironmentScore();
-            lqScore += f->getLifeQualityScore();
+            int ecoScore = currPlan->getEconomyScore(), envScore = currPlan->getEnvironmentScore(), lqScore = currPlan->getlifeQualityScore();
+            // include the scores of the underConstruction
+            for (Facility *f : currPlan->getUnderConstruction())
+            {
+                ecoScore += f->getEconomyScore();
+                envScore += f->getEnvironmentScore();
+                lqScore += f->getLifeQualityScore();
+            }
+            currPlan->setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore));
+            complete();
+            std::cout << "planID: " << planId << std::endl;
+            std::cout << "previousPolicy: " + prevPol << std::endl;
+            std::cout << "previousPolicy: " + currPlan->getSelectionPolicy()->getPolicyType() << std::endl;
+            hasChange = true;
         }
-        currPlan->setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore));
-        complete();
-        std::cout << "planID: " << planId << std::endl;
-        std::cout << "previousPolicy: " + prevPol << std::endl;
-        std::cout << "previousPolicy: " + currPlan->getSelectionPolicy()->getPolicyType() << std::endl;
     }
-    else
+    if (!hasChange)
     {
         error("Cannot change selection policy");
         std::cout << getErrorMsg() << std::endl;
@@ -270,7 +276,6 @@ void RestoreSimulation::act(Simulation &simulation)
 {
     if (backup != nullptr)
     {
-        // הבעיה פה היא שאחרי שמשחזרים את הדברים מוחקים את העצם שאנחנו נמצאים בו, של restore
         simulation = *backup;
         complete();
     }

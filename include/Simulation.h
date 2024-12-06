@@ -20,23 +20,26 @@ public:
     bool addSettlement(Settlement *settlement);
     bool addFacility(FacilityType facility);
     bool isSettlementExists(const string &settlementName);
-    bool isPlanExists(int planID);
     Settlement &getSettlement(const string &settlementName);
-    const vector<BaseAction*> getActionsLog() const;
-    const vector<Plan> getPlans()const ;
     Plan &getPlan(const int planID);
     void step();
     void close();
     void open();
 
-    static Settlement *find_Settlemnt(vector<Settlement *> settlement, const string &nameS);
-    static SelectionPolicy *create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore);
+    //---------funcions we've added-----------// 
+    static Settlement *find_Settlemnt(vector<Settlement *> settlement, const string &nameS); // returns the settlement from a vector
+    static SelectionPolicy *create_Policy(const string &typeP, int lqScore, int ecoScore, int envScore); //create a policy with specific parameters
+    const vector<BaseAction*> getActionsLog() const; //returns actionslog vector
+    const vector<Plan> getPlans()const ; //return plans vector
+    bool isPlanExists(int planID); //checks if there is a plan with the same id
+
     // Rule of 5:
     Simulation(const Simulation &other);
-    Simulation &operator=(const Simulation &other);
-    Simulation &operator=(Simulation &&other);
     ~Simulation();
     Simulation(Simulation &&other); 
+    Simulation &operator=(const Simulation &other);
+    Simulation &operator=(Simulation &&other);
+    
 
 
 private:

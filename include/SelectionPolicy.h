@@ -10,12 +10,13 @@ public:
     virtual const string toString() const = 0;
     virtual SelectionPolicy *clone() const = 0;
     virtual ~SelectionPolicy() = default;
-    virtual SelectionPolicy &operator=(const SelectionPolicy &other) = default;
+
+    virtual SelectionPolicy &operator=(const SelectionPolicy &other) = default; 
 
 //---------funcions we've added-----------// 
 
-    static bool isTrueSelectionPolicy(const string &Selectionpolicy);
-    const string &getPolicyType() const;
+    static bool isTrueSelectionPolicy(const string &Selectionpolicy); //checks if the string indicate a real policy
+    const string &getPolicyType() const;//returns the policyType
 
 protected:
     SelectionPolicy(const string &policytype);
@@ -30,11 +31,12 @@ class NaiveSelection : public SelectionPolicy
 {
 public:
     NaiveSelection();
-    NaiveSelection(int i);
+    NaiveSelection(int i); //start the selection policy from a specific index
     const FacilityType &selectFacility(const vector<FacilityType> &facilitiesOptions) override;
     const string toString() const override;
     NaiveSelection *clone() const override;
     ~NaiveSelection() override = default;
+
     NaiveSelection &operator=(const NaiveSelection &other) = default;
 
 private:
@@ -49,6 +51,7 @@ public:
     const string toString() const override;
     BalancedSelection *clone() const override;
     ~BalancedSelection() override = default;
+
     static void UpdateScores(BalancedSelection &pol, int quality, int economy, int environment); // update scores in all classes
     BalancedSelection &operator=(const BalancedSelection &other) = default;
 
@@ -62,7 +65,7 @@ class EconomySelection : public SelectionPolicy
 {
 public:
     EconomySelection();
-    EconomySelection(int i);
+    EconomySelection(int i); //start the selection policy from a specific index
     const FacilityType &selectFacility(const vector<FacilityType> &facilitiesOptions) override;
     const string toString() const override;
     EconomySelection *clone() const override;
@@ -77,7 +80,7 @@ class SustainabilitySelection : public SelectionPolicy
 {
 public:
     SustainabilitySelection();
-    SustainabilitySelection(int i);
+    SustainabilitySelection(int i); //start the selection policy from a specific index
     const FacilityType &selectFacility(const vector<FacilityType> &facilitiesOptions) override;
     const string toString() const override;
     SustainabilitySelection *clone() const override;

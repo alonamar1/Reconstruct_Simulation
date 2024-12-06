@@ -2,11 +2,13 @@
 #include <iostream>
 
 Settlement::Settlement(const string &name, enum SettlementType type) : name(name), type(type) {}
+
+Settlement::Settlement(const Settlement &s): name(s.getName()), type(s.getType()){}
+
 const string &Settlement::getName() const
 {
     return name;
 }
-Settlement::Settlement(const Settlement &s): name(s.getName()), type(s.getType()){}
 
 SettlementType Settlement::getType() const
 {

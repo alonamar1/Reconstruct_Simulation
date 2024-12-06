@@ -29,6 +29,8 @@ const FacilityCategory FacilityType::getCategory() const
 {
     return category;
 }
+
+//---------funcions we've added-----------// 
 FacilityStatus FacilityType::StringToFacilityStatus(const string &st)
 {
     if (st.compare("0") == 0)
@@ -89,13 +91,7 @@ const FacilityStatus &Facility::getStatus() const
 {
     return status;
 }
-const string Facility::getStringStatus() const
-{
-    if (status == FacilityStatus::OPERATIONAL)
-        return "OPERATIONAL";
-    else
-        return "UNDER_CONSTRUCTIONS";
-}
+
 const string Facility::toString() const
 {
     string cat;
@@ -113,11 +109,13 @@ const string Facility::toString() const
     return "Facility: " + getName() + "\nCategory: " + cat + "\nCost: " + std::to_string(getCost()) + "\nLife Quality Score: " + std::to_string(getLifeQualityScore()) + "\nEconomy Score: " + std::to_string(getEconomyScore()) + "\nEnvironment Score: " + std::to_string(getEnvironmentScore()) + "\nSettlement: " + settlementName + "\nStatus: " + stat + "\nTime Left: " + std::to_string(timeLeft);
 }
 
-/*FacilityType& FacilityType::operator=(const FacilityType& other):
-        name(other.name),
-        category(other.category),
-        price(other.price),
-        lifeQuality_score(other.lifeQuality_score),
-        economy_score(other.economy_score),
-        environment_score(other.environment_score)
-        {} */
+ //---------funcions we've added-----------// 
+
+const string Facility::getStringStatus() const
+{
+    if (status == FacilityStatus::OPERATIONAL)
+        return "OPERATIONAL";
+    else
+        return "UNDER_CONSTRUCTIONS";
+}
+

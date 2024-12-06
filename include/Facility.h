@@ -25,9 +25,11 @@ class FacilityType {
         int getEnvironmentScore() const;
         int getEconomyScore() const;
         const FacilityCategory getCategory() const;
-        static FacilityStatus StringToFacilityStatus (const string& st); 
-        static FacilityCategory StringToFacilityCategory (const string& st);
-        ~FacilityType() = default;
+
+    //---------funcions we've added-----------// 
+        static FacilityStatus StringToFacilityStatus (const string& st); //convert a string to FacilityStatus for creating facility
+        static FacilityCategory StringToFacilityCategory (const string& st); //convert a string to FacilityCategory for creating facility
+        ~FacilityType() = default; //destructor
     
 
     protected:
@@ -51,8 +53,10 @@ class Facility: public FacilityType {
         void setStatus(FacilityStatus status);
         const FacilityStatus& getStatus() const;
         const string toString() const;
-        const string getStringStatus() const;
-        ~Facility() = default;
+
+        //functions we've added
+        const string getStringStatus() const; //convert status to string for tostring functions
+        ~Facility() = default; 
 
     private:
         const string settlementName;
