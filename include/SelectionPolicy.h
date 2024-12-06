@@ -31,7 +31,6 @@ class NaiveSelection : public SelectionPolicy
 {
 public:
     NaiveSelection();
-    NaiveSelection(int i); //start the selection policy from a specific index
     const FacilityType &selectFacility(const vector<FacilityType> &facilitiesOptions) override;
     const string toString() const override;
     NaiveSelection *clone() const override;
@@ -65,7 +64,6 @@ class EconomySelection : public SelectionPolicy
 {
 public:
     EconomySelection();
-    EconomySelection(int i); //start the selection policy from a specific index
     const FacilityType &selectFacility(const vector<FacilityType> &facilitiesOptions) override;
     const string toString() const override;
     EconomySelection *clone() const override;
@@ -80,7 +78,6 @@ class SustainabilitySelection : public SelectionPolicy
 {
 public:
     SustainabilitySelection();
-    SustainabilitySelection(int i); //start the selection policy from a specific index
     const FacilityType &selectFacility(const vector<FacilityType> &facilitiesOptions) override;
     const string toString() const override;
     SustainabilitySelection *clone() const override;

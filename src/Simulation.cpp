@@ -153,7 +153,7 @@ Settlement &Simulation::getSettlement(const string &settlementName)
             return *s;
         }
     }
-    return *settlements[0];//to evoid compilation error, but actually the function can't get there since we always use "isSettlementExist" before calling the function.
+    return *settlements[0];//to evoid compilation warning, but actually the function can't get there since we always use "isSettlementExist" before calling the function.
 }
 
 Plan &Simulation::getPlan(const int planID)
@@ -165,7 +165,7 @@ Plan &Simulation::getPlan(const int planID)
             return p;
         }
     }
-    return plans[0]; //to evoid compilation error, but actually the function can't get there since we always use "isPlanExist" before calling the function.
+    return plans[0]; //to evoid compilation warning, but actually the function can't get there since we always use "isPlanExist" before calling the function.
 }
 
 void Simulation::step()

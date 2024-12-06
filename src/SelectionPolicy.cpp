@@ -21,7 +21,6 @@ const string &SelectionPolicy::getPolicyType() const
 
 //--------------NaiveSelection---------------------//
 NaiveSelection::NaiveSelection() : SelectionPolicy("nve"), lastSelectedIndex(-1) {} // when we add 1 in "selectSelection" func it wil start in index 0
-NaiveSelection::NaiveSelection(int i) : SelectionPolicy("nve"), lastSelectedIndex(i) {}
 const FacilityType &NaiveSelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
         lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size(); // Cycling on vector size
@@ -95,7 +94,6 @@ void BalancedSelection::UpdateScores(BalancedSelection &pol, int quality, int ec
 
 //--------------EconomySelection---------------------//
 EconomySelection::EconomySelection() : SelectionPolicy("eco"), lastSelectedIndex(0) {}
-EconomySelection::EconomySelection(int i) : SelectionPolicy("eco"), lastSelectedIndex(i) {}
 const FacilityType &EconomySelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
         bool found = false;
@@ -125,7 +123,6 @@ const string EconomySelection::toString() const
 
 //--------------SustainabilitySelection---------------------//
 SustainabilitySelection::SustainabilitySelection() : SelectionPolicy("env"), lastSelectedIndex(0) {}
-SustainabilitySelection::SustainabilitySelection(int i) : SelectionPolicy("env"), lastSelectedIndex(i) {}
 
 const FacilityType &SustainabilitySelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
