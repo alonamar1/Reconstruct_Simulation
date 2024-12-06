@@ -187,7 +187,7 @@ void ChangePlanPolicy::act(Simulation &simulation)
             envScore += f->getEnvironmentScore();
             lqScore += f->getLifeQualityScore();
         }
-        currPlan->setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore)); 
+        currPlan->setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore));
         complete();
         std::cout << "planID: " << planId << std::endl;
         std::cout << "previousPolicy: " + prevPol << std::endl;
@@ -212,9 +212,9 @@ const string ChangePlanPolicy::toString() const
 PrintActionsLog::PrintActionsLog() : BaseAction() {}
 void PrintActionsLog::act(Simulation &simulation)
 {
-    for (std::size_t i = 0; i < simulation.getActionsLog().size()-1 ; i++)
+    for (BaseAction *ba : simulation.getActionsLog())
     {
-       std::cout << simulation.getActionsLog()[i]->toString() << std::endl;
+        std::cout << ba->toString() << std::endl;
     }
     complete();
 }
@@ -251,6 +251,7 @@ const string Close::toString() const
 BackupSimulation::BackupSimulation() : BaseAction() {}
 void BackupSimulation::act(Simulation &simulation)
 {
+    delete backup;
     backup = new Simulation(simulation);
     complete();
 }
@@ -266,18 +267,18 @@ const string BackupSimulation::toString() const
 //--------------RestoresSimulation---------------------//
 RestoreSimulation::RestoreSimulation() : BaseAction() {}
 void RestoreSimulation::act(Simulation &simulation)
-{ 
+{
     if (backup != nullptr)
     {
         // הבעיה פה היא שאחרי שמשחזרים את הדברים מוחקים את העצם שאנחנו נמצאים בו, של restore
         simulation = *backup;
         complete();
     }
-    else 
+    else
     {
         error("No backup available");
         std::cout << getErrorMsg() << std::endl;
-    } 
+    }
 }
 RestoreSimulation *RestoreSimulation::clone() const
 {

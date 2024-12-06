@@ -208,7 +208,7 @@ Plan::Plan(const Plan &other)
     }
 }
 
-Plan::Plan(Plan &&other) // noexcept
+Plan::Plan(Plan &&other)
     : plan_id(other.plan_id),
       settlement(std::move(other.settlement)),
       selectionPolicy(other.selectionPolicy),
@@ -223,5 +223,5 @@ Plan::Plan(Plan &&other) // noexcept
     // Reset the source object
     other.underConstruction.clear();
     other.facilities.clear();
-    selectionPolicy = nullptr;
+    other.selectionPolicy = nullptr;
 }

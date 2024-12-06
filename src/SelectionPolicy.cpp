@@ -1,8 +1,8 @@
 #include "SelectionPolicy.h"
 //--------------SelectionPolicy---------------------//
-//---------funcions we've added-----------// 
+//---------funcions we've added-----------//
 
-SelectionPolicy::SelectionPolicy(const string& policytype) : policyType(policytype) {}
+SelectionPolicy::SelectionPolicy(const string &policytype) : policyType(policytype) {}
 
 bool SelectionPolicy::isTrueSelectionPolicy(const string &Selectionpolicy)
 {
@@ -99,8 +99,9 @@ EconomySelection::EconomySelection(int i) : SelectionPolicy("eco"), lastSelected
 const FacilityType &EconomySelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
         bool found = false;
+        std::size_t i = (lastSelectedIndex + 1) % facilitiesOptions.size();
         // Assuming there is at least one economy facility in vector
-        for (std::size_t i = lastSelectedIndex + 1; !found; i++)
+        while (!found)
         {
                 if (facilitiesOptions[i].getCategory() == FacilityCategory::ECONOMY)
                 {
@@ -108,10 +109,7 @@ const FacilityType &EconomySelection::selectFacility(const vector<FacilityType> 
                         lastSelectedIndex = i;
                 }
                 // Search in cycle until find next facility
-                if (i >= facilitiesOptions.size())
-                {
-                        i = 0;
-                }
+                i = (i + 1) % facilitiesOptions.size();
         }
         return facilitiesOptions[lastSelectedIndex];
 }
@@ -132,8 +130,9 @@ SustainabilitySelection::SustainabilitySelection(int i) : SelectionPolicy("env")
 const FacilityType &SustainabilitySelection::selectFacility(const vector<FacilityType> &facilitiesOptions)
 {
         bool found = false;
+        std::size_t i = (lastSelectedIndex + 1) % facilitiesOptions.size();
         // Assuming there is at least one environment facility in vector
-        for (std::size_t i = lastSelectedIndex + 1; !found; i++)
+        while (!found)
         {
                 if (facilitiesOptions[i].getCategory() == FacilityCategory::ENVIRONMENT)
                 {
@@ -141,10 +140,7 @@ const FacilityType &SustainabilitySelection::selectFacility(const vector<Facilit
                         lastSelectedIndex = i;
                 }
                 // Search in cycle until find next facility
-                if (i >= facilitiesOptions.size())
-                {
-                        i = 0;
-                }
+                i = (i + 1) % facilitiesOptions.size();
         }
         return facilitiesOptions[lastSelectedIndex];
 }

@@ -120,12 +120,12 @@ void Simulation::start()
             }
             else
             {
-                std::cout << "Invalid Syntex" << std::endl;
+                std::cout << "INVALID ACTION" << std::endl;
             }
             if (inputAction != nullptr)
             {
-                actionsLog.push_back(inputAction);
                 inputAction->act(*this);
+                actionsLog.push_back(inputAction);
             }
         }
     }
@@ -273,6 +273,8 @@ Simulation::~Simulation()
         delete s;
     }
     settlements.clear();
+    plans.clear();
+    facilitiesOptions.clear();
 }
 
 // Move constructor
