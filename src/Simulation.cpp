@@ -362,9 +362,9 @@ Simulation &Simulation::operator=(Simulation &&other)
         }
 
         //clear other
-        for (BaseAction *ba : other.actionsLog)
+        for (std::size_t i = 0; i < other.actionsLog.size(); i++)
         {
-            ba = nullptr;
+            other.actionsLog[i] = nullptr;
         }
         for  (std::size_t i = 0; i < other.settlements.size(); i++)
         {

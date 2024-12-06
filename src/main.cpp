@@ -10,10 +10,9 @@ int main(int argc, char** argv){
         cout << "usage: simulation <config_path>" << endl;
         return 0;
     }
-   
     string configurationFile = argv[1];
     Simulation simulation(configurationFile);
-    Simulation sim = (Simulation(configurationFile));
+    //Simulation* s1 = new Simulation(configurationFile);
     simulation.start();
     
     if(backup!=nullptr){
