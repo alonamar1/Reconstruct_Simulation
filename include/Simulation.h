@@ -34,7 +34,7 @@ public:
     // Rule of 5:
     Simulation(const Simulation &other);
     Simulation &operator=(const Simulation &other);
-    //Simulation &operator=(const Simulation &&other);
+    Simulation &operator=(Simulation &&other);
     ~Simulation();
     Simulation(Simulation &&other); 
 

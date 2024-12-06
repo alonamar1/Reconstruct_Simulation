@@ -322,42 +322,59 @@ Simulation &Simulation::operator=(const Simulation &other)
     return *this;
 }
 
-// need to try this!
-/*Simulation &Simulation::operator=(const Simulation &&other)
+Simulation &Simulation::operator=(Simulation &&other)
 {
     if (&other != this)
     {
-        isRunning = other.isRunning;
-        planCounter = other.planCounter;
+
+        //clear this
         for (BaseAction *ba : actionsLog)
         {
             delete ba;
-        }
-        actionsLog.clear();
-        for (BaseAction *ba : other.actionsLog)
-        {
-            actionsLog.push_back(ba);
-        }
-        for (BaseAction *ba : other.actionsLog)
-        {
-            ba = nullptr;
         }
         for (Settlement *s : settlements)
         {
             delete s;
         }
+        plans.clear();
+        facilitiesOptions.clear();
+        actionsLog.clear();
         settlements.clear();
+
+        //copy other's data
+        isRunning = other.isRunning;
+        planCounter = other.planCounter;
+        for (BaseAction *ba : other.actionsLog)
+        {
+            actionsLog.push_back(ba);
+        }
         for (Settlement *s : other.settlements)
         {
             settlements.push_back(s);
         }
-        for (Settlement *s : other.settlements)
+        for (std::size_t i = 0; i < other.plans.size(); i++)
         {
-            s = nullptr;
+            plans.push_back(other.plans[i]);
         }
-        plans = std::move(other.plans);
-        facilitiesOptions = std::move(other.facilitiesOptions);
+        for (std::size_t i = 0; i < other.facilitiesOptions.size(); i++)
+        {
+            facilitiesOptions.push_back(other.facilitiesOptions[i]);
+        }
+
+        //clear other
+        for (BaseAction *ba : other.actionsLog)
+        {
+            ba = nullptr;
+        }
+        for  (std::size_t i = 0; i < other.settlements.size(); i++)
+        {
+            other.settlements[i] = nullptr;
+        }
+        other.settlements.clear();
+        other.actionsLog.clear();
+        other.plans.clear();
+        other.facilitiesOptions.clear();
     }
     return *this;
 }
-*/
+
