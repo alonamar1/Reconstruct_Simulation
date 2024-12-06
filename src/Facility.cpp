@@ -25,7 +25,7 @@ int FacilityType::getEconomyScore() const
 {
     return economy_score;
 }
-FacilityCategory FacilityType::getCategory() const
+const FacilityCategory FacilityType::getCategory() const
 {
     return category;
 }

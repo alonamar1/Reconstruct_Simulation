@@ -221,7 +221,7 @@ Plan::Plan(Plan &&other) // noexcept
       environment_score(other.environment_score)
 {
     // Reset the source object
-    other.underConstruction = vector<Facility *>();
-    other.facilities = vector<Facility *>();
+    other.underConstruction.clear();
+    other.facilities.clear();
     selectionPolicy = nullptr;
 }

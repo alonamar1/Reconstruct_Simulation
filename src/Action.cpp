@@ -2,7 +2,7 @@
 #include <iostream>
 
 //--------------BaseAction---------------------//
-BaseAction::BaseAction() : errorMsg(""), status(ActionStatus::ERROR) {}
+BaseAction::BaseAction() : errorMsg(""), status(ActionStatus::COMPLETED) {}
 
 ActionStatus BaseAction::getStatus() const
 {
@@ -175,6 +175,7 @@ ChangePlanPolicy::ChangePlanPolicy(const int planId, const string &newPolicy) : 
 void ChangePlanPolicy::act(Simulation &simulation)
 {
     Plan *currPlan = &simulation.getPlan(planId);
+    string prevPol = currPlan->getSelectionPolicy()->getPolicyType();
     // just if there is a plan with the same name and the policy is diffrent the the prvious one
     if (simulation.isPlanExists(planId) && currPlan->getSelectionPolicy()->getPolicyType().compare(newPolicy) != 0)
     {
@@ -187,8 +188,10 @@ void ChangePlanPolicy::act(Simulation &simulation)
             lqScore += f->getLifeQualityScore();
         }
         currPlan->setSelectionPolicy(Simulation::create_Policy(newPolicy, lqScore, ecoScore, envScore)); 
-
         complete();
+        std::cout << "planID: " << planId << std::endl;
+        std::cout << "previousPolicy: " + prevPol << std::endl;
+        std::cout << "previousPolicy: " + currPlan->getSelectionPolicy()->getPolicyType() << std::endl;
     }
     else
     {
@@ -266,6 +269,7 @@ void RestoreSimulation::act(Simulation &simulation)
 { 
     if (backup != nullptr)
     {
+        // הבעיה פה היא שאחרי שמשחזרים את הדברים מוחקים את העצם שאנחנו נמצאים בו, של restore
         simulation = *backup;
         complete();
     }

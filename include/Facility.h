@@ -24,7 +24,7 @@ class FacilityType {
         int getLifeQualityScore() const;
         int getEnvironmentScore() const;
         int getEconomyScore() const;
-        FacilityCategory getCategory() const;
+        const FacilityCategory getCategory() const;
         static FacilityStatus StringToFacilityStatus (const string& st); 
         static FacilityCategory StringToFacilityCategory (const string& st);
         ~FacilityType() = default;

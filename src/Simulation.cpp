@@ -75,7 +75,7 @@ void Simulation::start()
         vector<string> action_Line = Auxiliary::parseArguments(user_input);
         if (action_Line.size() > 0)
         {
-            BaseAction *inputAction;
+            BaseAction *inputAction = nullptr;
             if (action_Line[0].compare("step") == 0 && action_Line.size() == 2)
             {
                 inputAction = new SimulateStep(std::stoi(action_Line[1]));
@@ -282,8 +282,6 @@ Simulation::Simulation(Simulation &&other) : isRunning(other.isRunning), planCou
     // Clears the moved stolen data beacuse rvalue, In order to prevent double deletion
     other.settlements.clear();
     other.actionsLog.clear();
-    other.plans.clear();
-    other.facilitiesOptions.clear();
 }
 
 Simulation &Simulation::operator=(const Simulation &other)
