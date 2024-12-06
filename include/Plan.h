@@ -28,6 +28,7 @@ public:
     const std::string getStatus();
 
     //---------funcions we've added-----------//
+    const string closeToString() const;
     const int getID() const; // returns the plan's ID
     const string getSettlementName() const;
     std::size_t limit(const Settlement &settle); // return the limit to construction facility

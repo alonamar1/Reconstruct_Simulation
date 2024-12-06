@@ -73,7 +73,7 @@ void Simulation::start()
         string user_input;
         std::getline(std::cin, user_input);
         vector<string> action_Line = Auxiliary::parseArguments(user_input);
-        if (action_Line.size() > 0) 
+        if (action_Line.size() > 0)
         {
             BaseAction *inputAction;
             if (action_Line[0].compare("step") == 0 && action_Line.size() == 2)
@@ -274,8 +274,17 @@ Simulation::~Simulation()
     }
     settlements.clear();
 }
+
+// Move constructor
 Simulation::Simulation(Simulation &&other) : isRunning(other.isRunning), planCounter(other.planCounter), actionsLog(std::move(other.actionsLog)),
-                                             plans(std::move(other.plans)), settlements(std::move(other.settlements)), facilitiesOptions(std::move(other.facilitiesOptions)) {}
+                                             plans(std::move(other.plans)), settlements(std::move(other.settlements)), facilitiesOptions(std::move(other.facilitiesOptions))
+{
+    // Clears the moved stolen data beacuse rvalue, In order to prevent double deletion
+    other.settlements.clear();
+    other.actionsLog.clear();
+    other.plans.clear();
+    other.facilitiesOptions.clear();
+}
 
 Simulation &Simulation::operator=(const Simulation &other)
 {
@@ -327,7 +336,7 @@ Simulation &Simulation::operator=(Simulation &&other)
     if (&other != this)
     {
 
-        //clear this
+        // clear this
         for (BaseAction *ba : actionsLog)
         {
             delete ba;
@@ -341,7 +350,7 @@ Simulation &Simulation::operator=(Simulation &&other)
         actionsLog.clear();
         settlements.clear();
 
-        //copy other's data
+        // copy other's data
         isRunning = other.isRunning;
         planCounter = other.planCounter;
         for (BaseAction *ba : other.actionsLog)
@@ -361,12 +370,12 @@ Simulation &Simulation::operator=(Simulation &&other)
             facilitiesOptions.push_back(other.facilitiesOptions[i]);
         }
 
-        //clear other
+        // clear other
         for (std::size_t i = 0; i < other.actionsLog.size(); i++)
         {
             other.actionsLog[i] = nullptr;
         }
-        for  (std::size_t i = 0; i < other.settlements.size(); i++)
+        for (std::size_t i = 0; i < other.settlements.size(); i++)
         {
             other.settlements[i] = nullptr;
         }
@@ -377,4 +386,3 @@ Simulation &Simulation::operator=(Simulation &&other)
     }
     return *this;
 }
-

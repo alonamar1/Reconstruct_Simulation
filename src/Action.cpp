@@ -230,7 +230,7 @@ void Close::act(Simulation &simulation)
 {
     for (const Plan &p : simulation.getPlans())
     {
-        std::cout << p.toString() << std::endl;
+        std::cout << p.closeToString() << std::endl;
     }
     complete();
     simulation.close();

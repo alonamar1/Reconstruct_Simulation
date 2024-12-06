@@ -158,6 +158,15 @@ const string Plan::toString() const
            "EnvironmentScore: " + std::to_string(environment_score) + "\n" +
            facilitiesString;
 }
+
+const string Plan::closeToString() const {
+    return "Plan ID: " + std::to_string(plan_id) + "\n" +
+           "SettlementName: " + settlement.getName() + "\n" +
+           "LifeQualityScore: " + std::to_string(life_quality_score) + "\n" +
+           "EconomyScore: " + std::to_string(economy_score) + "\n" +
+           "EnvironmentScore: " + std::to_string(environment_score);
+}
+
 Plan::~Plan()
 {
     // Clean up dynamically allocated memory for facilities under construction

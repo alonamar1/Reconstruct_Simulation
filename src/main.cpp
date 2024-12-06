@@ -11,9 +11,10 @@ int main(int argc, char** argv){
         return 0;
     }
     string configurationFile = argv[1];
-    Simulation simulation(configurationFile);
-    //Simulation* s1 = new Simulation(configurationFile);
-    simulation.start();
+    //Simulation simulation(configurationFile);
+    Simulation s1 = std::move(Simulation(configurationFile));
+    //simulation.start();
+    s1.start();
     
     if(backup!=nullptr){
     	delete backup;
