@@ -5,7 +5,7 @@ all: clean link run checkMemo
 
 link: compile
 	@echo "Linking object files"
-	g++ -o bin/main bin/main.o bin/Settlement.o bin/Auxiliary.o bin/Facility.o bin/SelectionPolicy.o bin/Plan.o bin/Simulation.o bin/Action.o
+	g++ -o bin/simulation bin/main.o bin/Settlement.o bin/Auxiliary.o bin/Facility.o bin/SelectionPolicy.o bin/Plan.o bin/Simulation.o bin/Action.o
 
 compile: src/main.cpp src/Auxiliary.cpp
 	@echo "Compiling source code"
@@ -19,10 +19,10 @@ compile: src/main.cpp src/Auxiliary.cpp
 	g++ -g -I "include/" -c -Wall -Weffc++ -std=c++11 -o bin/Action.o src/Action.cpp
 run:
 	@echo "Run Program"
-	./bin/main config_file.txt
+	./bin/simulation config_file.txt
 
 clean:
 	@echo "Cleaning bin directory"
 	rm -f bin/*
 checkMemo:
-	valgrind --leak-check=full --show-reachable=yes --track-origins=yes ./bin/main ./config_file.txt
+	valgrind --leak-check=full --show-reachable=yes --track-origins=yes ./bin/simulation ./config_file.txt
